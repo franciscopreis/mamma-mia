@@ -24,7 +24,7 @@ export default function NavbarLinks() {
           key={l.href}
           href={l.href}
           onClick={(e) => handleScroll(e, l.href)}
-          className="hover:scale-105 hover:text-red-700 transition-all"
+          className="md:hover:scale-105 hover:text-red-700 transition-all"
         >
           {l.label}
         </Link>

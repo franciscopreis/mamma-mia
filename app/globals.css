@@ -30,3 +30,36 @@ body {
   max-width: 1200px;
   margin: 0 auto;
 }
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.7s ease-out forwards;
+}
+
+.no-transition * {
+  transition: none !important;
+  animation: none !important;
+}
+
+.fixed,
+.absolute {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000;
+}
+
+/* Isolar animações */
+.mobile-menu-isolated {
+  isolation: isolate;
+  contain: layout style;
+}

@@ -1,7 +1,3 @@
-import type { Metadata } from 'next'
-import Link from 'next/link'
-import Logo from '@/components/Logo'
-import { IoMdCall } from 'react-icons/io'
 import { Montserrat, Roboto } from 'next/font/google'
 import './globals.css'
 import Navbar from '@/components/navbar/Navbar'

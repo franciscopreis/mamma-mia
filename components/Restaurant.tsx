@@ -8,7 +8,7 @@ export default function Restaurant() {
     <section className="py-15 px-5 md:px-10 " id="restaurant">
       {/* TITULOS PRINCIPAIS */}
       <div className="max-w-4xl mx-auto flex flex-col">
-        <ScrollParallax fromX={-100} fromY={0}>
+        <ScrollParallax startY={30} delay={100}>
           <h2 className="text-center text-3xl md:text-4xl tracking-wide italic font-serif text-red-800 leading-snug">
             A vista é de graça <br></br>e a simpatia também
           </h2>

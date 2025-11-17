@@ -1,7 +1,10 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
+import { IoClose } from 'react-icons/io5'
+import { GiHamburgerMenu } from 'react-icons/gi'
 import Link from 'next/link'
+import dynamic from 'next/dynamic'
 
 const links = [
   { href: '#restaurant', label: 'Pizzeria' },
@@ -10,29 +13,70 @@ const links = [
   { href: '#contact', label: 'Contactos' },
 ]
 
-export default function MobileMenu() {
+function MobileMenuContent() {
   const [isOpen, setIsOpen] = useState(false)
+  const menuRef = useRef<HTMLDivElement>(null)
+  const buttonRef = useRef<HTMLButtonElement>(null)
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        menuRef.current &&
+        !menuRef.current.contains(event.target as Node) &&
+        buttonRef.current &&
+        !buttonRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false)
+      }
+    }
+
+    const handleEscapeKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setIsOpen(false)
+      }
+    }
+
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside)
+      document.addEventListener('keydown', handleEscapeKey)
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = 'unset'
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+      document.removeEventListener('keydown', handleEscapeKey)
+      document.body.style.overflow = 'unset'
+    }
+  }, [isOpen])
 
   return (
     <div className="relative">
-      {/* Hamburger Button */}
       <button
+        ref={buttonRef}
         onClick={() => setIsOpen(!isOpen)}
-        className="md:hidden text-emerald-600 text-3xl cursor-pointer hover:scale-105 transition-transform items-center relative bottom-0.5"
+        className="md:hidden text-emerald-600 cursor-pointer flex items-center justify-center p-2"
         aria-label={isOpen ? 'Fechar menu' : 'Abrir menu'}
       >
-        {isOpen ? 'x' : '☰'}
+        {isOpen ? (
+          <IoClose className="text-2xl" />
+        ) : (
+          <GiHamburgerMenu className="text-2xl" />
+        )}
       </button>
 
-      {/* Menu mobile */}
       {isOpen && (
-        <div className="absolute top-12 right-0 bg-white border border-emerald-200 rounded-lg shadow-md w-48 flex flex-col py-2 z-50">
+        <div
+          ref={menuRef}
+          className="fixed top-14 right-4 bg-white border border-emerald-200 rounded-lg shadow-xl w-48 flex flex-col py-2 z-[60]"
+        >
           {links.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              onClick={() => setIsOpen(false)} // fecha menu ao clicar
-              className="px-4 py-2 text-emerald-800 hover:bg-emerald-50 transition-colors"
+              onClick={() => setIsOpen(false)}
+              className="px-4 py-3 text-emerald-800 hover:bg-emerald-50 border-b border-emerald-100 last:border-b-0"
             >
               {link.label}
             </Link>
@@ -42,3 +86,8 @@ export default function MobileMenu() {
     </div>
   )
 }
+
+// Apenas o dynamic import já resolve o problema de hydration
+export default dynamic(() => Promise.resolve(MobileMenuContent), {
+  ssr: false,
+})

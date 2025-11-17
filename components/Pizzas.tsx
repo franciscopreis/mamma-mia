@@ -68,7 +68,7 @@ export default function Pizzas() {
       className="py-15 w-full  bg-cover bg-center  bg-amber-200/30 "
     >
       <div className="max-w-6xl mx-auto px-4 text-center">
-        <ScrollParallax fromX={100} fromY={0}>
+        <ScrollParallax startY={30} delay={100}>
           <h2 className="text-center text-3xl md:text-4xl tracking-wide italic font-serif text-red-800 leading-snug mb-5">
             Conheça as nossas <span className="text-emerald-800">pizzas</span>
             <br></br> e não só

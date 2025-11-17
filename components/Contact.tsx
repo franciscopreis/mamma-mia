@@ -14,7 +14,7 @@ export default function Contact() {
         <h2 className="text-3xl md:text-4xl tracking-wide italic font-serif text-red-800 leading-snug text-center">
           Horários
         </h2>
-        <div className="mt-6 flex flex-col items-center md:items-start text-gray-700 space-y-2 text-center md:text-left">
+        <div className="mt-6 flex flex-col items-center md:items-start text-gray-700 space-y-2 text-center  mx-auto">
           <p>
             <span className="text-emerald-600 font-semibold">Abertos:</span>{' '}
             <br></br>De terça-feira a domingo
@@ -35,16 +35,12 @@ export default function Contact() {
         <h2 className="text-3xl md:text-4xl tracking-wide italic font-serif text-red-800 leading-snug mt-10 text-center flex flex-col">
           Contactos
         </h2>
-        <div className="mt-4 space-y-2 text-gray-600 ">
-          <p>
-            <span className="font-semibold">Morada:</span> Rua José Veríssimo,
-            JMCL, 2560-409
-          </p>
-          <p className="flex flex-row">
-            <span className="font-semibold">Telefone: </span>{' '}
+        <div className="mt-4 space-y-2 text-gray-600 mx-auto text-center">
+          <p>Rua José Veríssimo, JMCL, 2560-409</p>
+          <p className="">
             <Link
               href="tel:+351261937695"
-              className="flex items-center text-emerald-700 hover:text-red-700 transition-colors hover:scale-105"
+              className=" text-emerald-700 hover:text-red-700 transition-colors hover:scale-105"
               aria-label="Ligar para +351 261 937 695"
             >
               +351 261 937 695
@@ -53,14 +49,14 @@ export default function Contact() {
         </div>
 
         {/* WhatsApp */}
-        <div className="mt-6">
+        <div className="mt-6 mx-auto">
           <a
             href="https://wa.me/351913963958?text=Olá!%20Quero%20mais%20informações"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-block bg-green-500 text-white font-semibold px-6 py-3 rounded-full shadow-lg hover:bg-green-600 transition transform hover:scale-105"
           >
-            💬 Contactar via WhatsApp
+            💬 Fale connosco via WhatsApp
           </a>
         </div>
       </div>
