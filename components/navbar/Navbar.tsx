@@ -1,20 +1,28 @@
 'use client'
 
 import Link from 'next/link'
+import { useParams } from 'next/navigation'
 import { IoMdCall } from 'react-icons/io'
 import NavbarLinks from './NavbarLinks'
 import MobileMenu from './MobileMenu'
 import NavbarLogo from './NavbarLogo'
+import LanguageSwitcher from '../LanguageSwitcher'
+import { useDictionary } from '@/hooks/useDictionary'
 
 export default function Navbar() {
+  const params = useParams()
+  const { dictionary } = useDictionary()
+
+  if (!dictionary) return null
+
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-emerald-600 shadow-md">
       <nav className="mx-auto flex items-center justify-between py-2 w-full max-w-7xl px-4 min-h-14">
-        {/* Logo sempre à esquerda */}
+        {/* Logo - SEMPRE à esquerda */}
         <Link
           href="/"
-          aria-label="Página inicial"
-          className="flex mx-2 md:mx-4"
+          aria-label={dictionary.navigation.ariaLabels.homePage}
+          className="flex flex-shrink-0 mx-2 md:mx-4"
         >
           <NavbarLogo />
         </Link>
@@ -24,29 +32,40 @@ export default function Navbar() {
           <NavbarLinks />
         </div>
 
-        {/* Telefone + Hamburger mobile */}
-        <div className="flex items-center gap-4 md:hidden">
-          <Link
-            href="tel:+351261937695"
-            className="flex items-center text-emerald-700 hover:text-red-700 transition-colors hover:scale-105"
-            aria-label="Ligar para +351 261 937 695"
-          >
-            <IoMdCall className="text-xl sm:text-2xl" />
-          </Link>
+        {/* Grupo DIREITA - Compacto no mobile */}
+        <div className="flex items-center gap-2 md:gap-4">
+          {/* Language Switcher */}
+          <div className="flex-shrink-0">
+            <LanguageSwitcher currentLang={params.lang as string} />
+          </div>
 
-          <MobileMenu />
-        </div>
+          {/* Telefone desktop - ícone + número */}
+          <div className="hidden md:flex items-center flex-shrink-0">
+            <Link
+              href="tel:+351261937695"
+              className="flex items-center text-emerald-700 hover:text-red-700 transition-colors hover:scale-105"
+              aria-label={dictionary.navigation.ariaLabels.callPhone}
+            >
+              <IoMdCall className="text-xl sm:text-2xl" />
+              <span className="ml-2 text-sm">+351 261 937 695</span>
+            </Link>
+          </div>
 
-        {/* Telefone desktop */}
-        <div className="hidden md:flex items-center">
-          <Link
-            href="tel:+351261937695"
-            className="flex items-center text-emerald-700 hover:text-red-700 transition-colors hover:scale-105"
-            aria-label="Ligar para +351 261 937 695"
-          >
-            <IoMdCall className="text-xl sm:text-2xl" />
-            <span className="ml-2 text-sm lg:text-base">+351 261 937 695</span>
-          </Link>
+          {/* Telefone mobile - apenas ícone */}
+          <div className="md:hidden flex-shrink-0">
+            <Link
+              href="tel:+351261937695"
+              className="flex items-center text-emerald-700 hover:text-red-700 transition-colors hover:scale-105"
+              aria-label={dictionary.navigation.ariaLabels.callPhone}
+            >
+              <IoMdCall className="text-xl sm:text-2xl" />
+            </Link>
+          </div>
+
+          {/* Hamburger mobile */}
+          <div className="md:hidden flex-shrink-0">
+            <MobileMenu />
+          </div>
         </div>
       </nav>
     </header>

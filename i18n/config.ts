@@ -1,0 +1,7 @@
+// src/i18n/config.ts
+export const i18n = {
+  defaultLocale: 'pt',
+  locales: ['pt', 'en', 'es', 'fr', 'de'] as const,
+}
+
+export type Locale = (typeof i18n)['locales'][number]

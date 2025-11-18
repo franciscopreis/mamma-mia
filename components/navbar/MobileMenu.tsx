@@ -5,18 +5,13 @@ import { IoClose } from 'react-icons/io5'
 import { GiHamburgerMenu } from 'react-icons/gi'
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
-
-const links = [
-  { href: '#restaurant', label: 'Pizzeria' },
-  { href: '#pizzas', label: 'Menu' },
-  { href: '#testimonials', label: 'Avaliações' },
-  { href: '#contact', label: 'Contactos' },
-]
+import { useDictionary } from '@/hooks/useDictionary'
 
 function MobileMenuContent() {
   const [isOpen, setIsOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
   const buttonRef = useRef<HTMLButtonElement>(null)
+  const { dictionary, loading } = useDictionary()
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -51,13 +46,54 @@ function MobileMenuContent() {
     }
   }, [isOpen])
 
+  // ✅ Loading state
+  if (loading) {
+    return (
+      <div className="md:hidden">
+        <button
+          aria-label="Abrir menu"
+          className="text-emerald-600 cursor-pointer flex items-center justify-center p-2"
+        >
+          <GiHamburgerMenu className="text-2xl" />
+        </button>
+      </div>
+    )
+  }
+
+  // ✅ Verificação se dictionary existe
+  if (!dictionary) {
+    return (
+      <div className="md:hidden">
+        <button
+          aria-label="Abrir menu"
+          className="text-emerald-600 cursor-pointer flex items-center justify-center p-2"
+        >
+          <GiHamburgerMenu className="text-2xl" />
+        </button>
+      </div>
+    )
+  }
+
+  // ✅ Links internacionalizados
+  const links = [
+    { href: '#restaurant', label: dictionary.navigation.pizzeria },
+    { href: '#pizzas', label: dictionary.navigation.menu },
+    { href: '#testimonials', label: dictionary.navigation.testimonials },
+    { href: '#contact', label: dictionary.navigation.contacts },
+  ]
+
   return (
     <div className="relative">
       <button
         ref={buttonRef}
         onClick={() => setIsOpen(!isOpen)}
         className="md:hidden text-emerald-600 cursor-pointer flex items-center justify-center p-2"
-        aria-label={isOpen ? 'Fechar menu' : 'Abrir menu'}
+        // ✅ aria-label internacionalizado
+        aria-label={
+          isOpen
+            ? dictionary.navigation.ariaLabels.closeMenu
+            : dictionary.navigation.ariaLabels.openMenu
+        }
       >
         {isOpen ? (
           <IoClose className="text-2xl" />

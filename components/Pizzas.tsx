@@ -1,97 +1,138 @@
+// src/components/Pizzas.tsx
+'use client'
+
 import Image from 'next/image'
 import ScrollParallax from './ScrollParallax'
+import { useDictionary } from '@/hooks/useDictionary'
+import { getNestedValue } from '@/utils/objectHelpers'
 
-type Pizza = {
+export type Pizza = {
   number: number | string
-  name: string
+  nameKey: string
   img: string
-  ingredients: string
+  ingredientsKey: string
   price: string
   category: string
 }
 
+// ✅ Dados das pizzas
 const items: Pizza[] = [
   {
     number: '0A',
-    name: 'Pizza Parma',
+    nameKey: 'pizzas.items.parma.name',
     img: '/facebook/0A-pizza-parma.jpg',
-    ingredients: 'tomate • queijo • presunto',
+    ingredientsKey: 'pizzas.items.parma.ingredients',
     price: '17.90',
     category: 'pizzas',
   },
   {
     number: '0B',
-    name: 'Pizza Padovana',
+    nameKey: 'pizzas.items.padovana.name',
     img: '/facebook/0B-pizza-padovana.jpg',
-    ingredients: 'tomate • queijo • paio do lombo',
+    ingredientsKey: 'pizzas.items.padovana.ingredients',
     price: '18.90',
     category: 'pizzas',
   },
   {
     number: '0C',
-    name: 'Pizza Bacon',
+    nameKey: 'pizzas.items.bacon.name',
     img: '/facebook/0C-pizza-bacon.jpg',
-    ingredients: 'tomate • queijo • bacon',
+    ingredientsKey: 'pizzas.items.bacon.ingredients',
     price: '16.90',
     category: 'pizzas',
   },
   {
     number: '1',
-    name: 'Pizza Margarita',
+    nameKey: 'pizzas.items.margherita.name',
     img: '/facebook/1-pizza-margarita.jpg',
-    ingredients: 'tomate • queijo',
+    ingredientsKey: 'pizzas.items.margherita.ingredients',
     price: '16.90',
     category: 'pizzas',
   },
   {
     number: '2',
-    name: 'Pizza Salame',
+    nameKey: 'pizzas.items.salame.name',
     img: '/facebook/2-pizza-salame.jpg',
-    ingredients: 'tomate • queijo • salame',
+    ingredientsKey: 'pizzas.items.salame.ingredients',
     price: '16.90',
     category: 'pizzas',
   },
   {
     number: '3',
-    name: 'Pizza Funghi',
+    nameKey: 'pizzas.items.funghi.name',
     img: '/facebook/3-pizza-funghi.jpg',
-    ingredients: 'tomate • queijo • cogumelos',
+    ingredientsKey: 'pizzas.items.funghi.ingredients',
     price: '16.90',
     category: 'pizzas',
   },
 ]
 
 export default function Pizzas() {
+  const { dictionary, loading } = useDictionary()
+
+  if (loading) {
+    return (
+      <section
+        id="pizzas"
+        className="py-15 w-full bg-cover bg-center bg-amber-200/30"
+      >
+        <div className="max-w-6xl mx-auto px-4 text-center">
+          <div className="animate-pulse h-8 bg-gray-300 rounded mb-5"></div>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            {[...Array(6)].map((_, i) => (
+              <div
+                key={i}
+                className="animate-pulse bg-gray-300 h-48 rounded"
+              ></div>
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  if (!dictionary) {
+    return (
+      <section
+        id="pizzas"
+        className="py-15 w-full bg-cover bg-center bg-amber-200/30"
+      >
+        <div className="max-w-6xl mx-auto px-4 text-center">
+          <p>Erro ao carregar menu</p>
+        </div>
+      </section>
+    )
+  }
+
   return (
     <section
       id="pizzas"
-      className="py-15 w-full  bg-cover bg-center  bg-amber-200/30 "
+      className="py-15 w-full bg-cover bg-center bg-amber-200/30"
     >
       <div className="max-w-6xl mx-auto px-4 text-center">
         <ScrollParallax startY={30} delay={100}>
           <h2 className="text-center text-3xl md:text-4xl tracking-wide italic font-serif text-red-800 leading-snug mb-5">
-            Conheça as nossas <span className="text-emerald-800">pizzas</span>
-            <br></br> e não só
+            {dictionary.pizzas?.title}
           </h2>
         </ScrollParallax>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 ">
+        <div className="grid grid-cols-2 md:grid-cols-3">
           {items.map((p) => (
-            <div key={p.name} className="flex flex-col items-center  p-3">
-              <div className="relative  mb-4 lg:px-5 lg:pt-5">
+            <div key={p.nameKey} className="flex flex-col items-center p-3">
+              <div className="relative mb-4 lg:px-5 lg:pt-5">
                 <Image
                   src={p.img}
-                  alt={p.name}
+                  alt={getNestedValue(dictionary, p.nameKey)}
                   width={800}
                   height={500}
                   className="object-cover rounded-xl"
                 />
               </div>
-              <h3 className="md:text-xl text-sm font-medium mb-2 text-emerald-800  tracking-wider leading-tight">
-                {p.number} - {p.name}
+              <h3 className="md:text-xl text-sm font-medium mb-2 text-emerald-800 tracking-wider leading-tight">
+                {p.number} - {getNestedValue(dictionary, p.nameKey)}
               </h3>
               <p className="md:text-base text-xs mb-4 text-red-800">
-                {p.ingredients}
+                {getNestedValue(dictionary, p.ingredientsKey)}
               </p>
             </div>
           ))}

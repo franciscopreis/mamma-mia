@@ -4,10 +4,30 @@ import HeroLogo from './HeroLogo'
 import HeroCarousel from './HeroCarousel'
 import Link from 'next/link'
 import OpeningStatus from './OpeningStatus'
+import { useDictionary } from '@/hooks/useDictionary'
 
 export default function Hero() {
+  const { dictionary, loading } = useDictionary()
+
+  if (loading) {
+    return (
+      <section className="relative w-full flex justify-center overflow-visible bg-gray-300 pb-20">
+        <div className="animate-pulse bg-gray-400 h-64 w-full"></div>
+      </section>
+    )
+  }
+
+  // ✅ VERIFICAÇÃO EXPLÍCITA
+  if (!dictionary) {
+    return (
+      <section className="relative w-full flex justify-center overflow-visible bg-gray-300 pb-20">
+        <div className="text-center">Erro ao carregar traduções</div>
+      </section>
+    )
+  }
+
   return (
-    <section className="relative w-full flex justify-center  overflow-visible bg-gray-300 pb-20">
+    <section className="relative w-full flex justify-center overflow-visible bg-gray-300 pb-20">
       <HeroCarousel />
 
       <div className="text-center px-4 max-w-3xl z-20 font-montserrat">
@@ -16,10 +36,9 @@ export default function Hero() {
         </div>
 
         <div className="mt-6 flex flex-col items-center gap-4">
-          {/* Mensagem de abertura */}
+          {/* ✅ AGORA DICTIONARY NUNCA É NULL */}
           <p className="tracking-widest text-xl font-light italic max-w-xl mt-4">
-            Desde 1996 a oferecer o autêntico sabor das pizzas italianas em
-            Santa Cruz
+            {dictionary.hero.subtitle}
           </p>
 
           <div className="flex flex-col justify-center gap-4 mt-4">
@@ -27,9 +46,9 @@ export default function Hero() {
               href="#pizzas"
               className="tracking-widest md:text-xl text-base font-light w-auto border rounded-xl mx-auto hover:scale-105 px-4 py-1 bg-emerald-600/40 shadow-xl"
             >
-              Menu
+              {dictionary.hero.menuButton}
             </Link>
-            {/* Status de abertura */}
+
             <OpeningStatus className="mb-2" />
           </div>
         </div>

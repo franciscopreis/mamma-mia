@@ -9,37 +9,39 @@ import {
 } from 'react-icons/fa'
 import { SiGooglemaps } from 'react-icons/si'
 import ScrollParallax from './ScrollParallax'
+import { useDictionary } from '@/hooks/useDictionary'
 
+// ✅ Reviews mantidas nos idiomas originais
 const reviews = [
   {
     text: 'Recomendo todo o serviço, desde o atendimento rápido até à simpatia da equipa, passando pela qualidade das pizzas.',
     author: '— Ariana Sofia',
-    plataform: 'Facebook',
+    platform: 'Facebook',
   },
   {
     text: 'To start service is excellent. All the food we had was so tasty, salad, apps and house wine. Would highly recommend. Was in Portugal for 3 months must have ate here at least 5 times.',
     author: '— Sandra Rodrigues',
-    plataform: 'Trip Advisor',
+    platform: 'Trip Advisor',
   },
   {
     text: 'Wow! The food is Amazing!! Seafood is amazing! Steaks are amazing! All the traditional Portuguese dishes are phenomenal!',
     author: '— Will',
-    plataform: 'Google Maps',
+    platform: 'Google Maps',
   },
   {
     text: 'Love this place! Very nice staff! Food is fabulous, and price is excellent. Location is even better, with views of the ocean while you eat.',
     author: '— Jose Shing',
-    plataform: 'Facebook',
+    platform: 'Facebook',
   },
   {
     text: 'Already eaten very well twice on our holiday. Once pizza and lasagne and once picanha and grilled squid. All super delicious!',
     author: '— Kevin',
-    plataform: 'Trip Advisor',
+    platform: 'Trip Advisor',
   },
   {
     text: 'Excelente pizzaria com muita escolha além dos pratos italianos. Muita variedade de carnes e excelentes preços. Recomendo',
     author: '— Miguel Peixoto',
-    plataform: 'Google Maps',
+    platform: 'Google Maps',
   },
 ]
 
@@ -50,6 +52,7 @@ export default function Testimonials() {
   const [startX, setStartX] = useState(0)
   const [currentX, setCurrentX] = useState(0)
   const touchAreaRef = useRef<HTMLDivElement>(null)
+  const { dictionary, loading } = useDictionary()
 
   const next = useCallback(() => {
     setIsVisible(false)
@@ -75,7 +78,7 @@ export default function Testimonials() {
     }, 300)
   }, [])
 
-  // Touch event handlers
+  // Touch event handlers (mantidos iguais)
   const handleTouchStart = useCallback((e: React.TouchEvent) => {
     setIsDragging(true)
     setStartX(e.touches[0].clientX)
@@ -94,14 +97,12 @@ export default function Testimonials() {
     if (!isDragging) return
 
     const diff = startX - currentX
-    const minSwipeDistance = 50 // Distância mínima para considerar um swipe
+    const minSwipeDistance = 50
 
     if (Math.abs(diff) > minSwipeDistance) {
       if (diff > 0) {
-        // Swipe para a esquerda - próxima review
         next()
       } else {
-        // Swipe para a direita - review anterior
         prev()
       }
     }
@@ -111,7 +112,7 @@ export default function Testimonials() {
     setCurrentX(0)
   }, [isDragging, startX, currentX, next, prev])
 
-  // Mouse event handlers para desktop (opcional)
+  // Mouse event handlers (mantidos iguais)
   const handleMouseDown = useCallback((e: React.MouseEvent) => {
     setIsDragging(true)
     setStartX(e.clientX)
@@ -145,11 +146,9 @@ export default function Testimonials() {
     setCurrentX(0)
   }, [isDragging, startX, currentX, next, prev])
 
-  // Calcular transform para feedback visual durante o drag
   const getDragTransform = () => {
     if (!isDragging) return ''
     const diff = startX - currentX
-    // Limitar o movimento máximo para não sair muito da tela
     const boundedDiff = Math.max(Math.min(diff, 100), -100)
     return `translateX(${boundedDiff * 0.5}px)`
   }
@@ -159,26 +158,51 @@ export default function Testimonials() {
     return () => clearInterval(timer)
   }, [next])
 
+  if (loading) {
+    return (
+      <section
+        className="relative py-15 w-full bg-emerald-100"
+        id="testimonials"
+      >
+        <div className="animate-pulse max-w-3xl mx-auto px-4">
+          <div className="h-8 bg-gray-300 rounded mb-10"></div>
+          <div className="h-20 bg-gray-300 rounded"></div>
+        </div>
+      </section>
+    )
+  }
+
+  if (!dictionary) {
+    return (
+      <section
+        className="relative py-15 w-full bg-emerald-100"
+        id="testimonials"
+      >
+        <div className="max-w-3xl mx-auto px-4 text-center">
+          <p>Erro ao carregar avaliações</p>
+        </div>
+      </section>
+    )
+  }
+
   return (
     <section className="relative py-15 w-full bg-emerald-100" id="testimonials">
       <div className="relative">
         <ScrollParallax startY={30} delay={100}>
           <h2 className="text-center text-3xl md:text-4xl tracking-wide italic font-serif text-red-800 leading-snug mb-10">
-            O que dizem os nossos{' '}
-            <span className="text-emerald-800">clientes</span>
+            {dictionary.testimonials?.title}
           </h2>
         </ScrollParallax>
 
         <div className="flex flex-row lg:max-w-3xl mx-auto items-center">
           <button
-            aria-label="Anterior"
+            aria-label={dictionary.testimonials?.ariaLabels.previous}
             onClick={prev}
             className="px-4 py-2 h-8 rounded-lg hover:text-red-800 transition cursor-pointer hidden md:block"
           >
             <FaChevronLeft />
           </button>
 
-          {/* Área touch com eventos de swipe */}
           <div
             ref={touchAreaRef}
             className="h-40 flex items-center justify-center text-sm max-w-xs lg:max-w-xl mx-auto touch-pan-y select-none"
@@ -188,7 +212,7 @@ export default function Testimonials() {
             onMouseDown={handleMouseDown}
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUp}
-            onMouseLeave={handleMouseUp} // Caso o mouse saia da área durante o drag
+            onMouseLeave={handleMouseUp}
             style={{ cursor: isDragging ? 'grabbing' : 'grab' }}
           >
             <div
@@ -198,18 +222,19 @@ export default function Testimonials() {
                 transition: isDragging ? 'none' : 'all 0.3s ease',
               }}
             >
+              {/* ✅ Reviews mantidas nos idiomas originais */}
               <p className="italic md:max-w-xl text-center lg:text-base text-sm">
                 {reviews[index].text}
               </p>
               <p className="mt-4 font-semibold text-center">
                 {reviews[index].author}
-                {reviews[index].plataform === 'Trip Advisor' && (
+                {reviews[index].platform === 'Trip Advisor' && (
                   <FaTripadvisor className="inline-block text-green-600 ml-2 relative bottom-0.5" />
                 )}
-                {reviews[index].plataform === 'Facebook' && (
+                {reviews[index].platform === 'Facebook' && (
                   <FaFacebook className="inline-block text-blue-600 ml-2 relative bottom-0.5" />
                 )}
-                {reviews[index].plataform === 'Google Maps' && (
+                {reviews[index].platform === 'Google Maps' && (
                   <SiGooglemaps className="inline-block text-red-600 ml-2 relative bottom-0.5" />
                 )}
               </p>
@@ -217,7 +242,7 @@ export default function Testimonials() {
           </div>
 
           <button
-            aria-label="Seguinte"
+            aria-label={dictionary.testimonials?.ariaLabels.next}
             onClick={next}
             className="px-4 py-2 rounded-lg hover:text-red-800 transition cursor-pointer hidden md:block"
           >
@@ -225,17 +250,6 @@ export default function Testimonials() {
           </button>
         </div>
       </div>
-
-      {/* Indicador visual de swipe (opcional)
-      {isDragging && (
-        <div className="flex justify-center mt-2">
-          <p className="text-xs text-emerald-600 italic">
-            {currentX < startX
-              ? '← Solte para anterior'
-              : 'Solte para próxima →'}
-          </p>
-        </div>
-      )} */}
 
       {/* BOLINHAS */}
       <div className="flex justify-center mt-8">
@@ -249,7 +263,7 @@ export default function Testimonials() {
                   ? 'bg-emerald-600 scale-110'
                   : 'bg-emerald-200 hover:bg-emerald-400'
               }`}
-              aria-label={`Ver review ${i + 1}`}
+              aria-label={`${dictionary.testimonials?.ariaLabels.viewReview} ${i + 1}`}
             />
           ))}
         </div>
@@ -262,7 +276,7 @@ export default function Testimonials() {
           rel="noopener noreferrer"
           className="flex items-center gap-2 border px-4 py-2 rounded-xl transition hover:text-red-800"
         >
-          <span>99 %</span>
+          <span>{dictionary.testimonials?.ratings.facebook}</span>
           <FaFacebook className="text-blue-500 text-xl" />
         </a>
 
@@ -272,7 +286,7 @@ export default function Testimonials() {
           rel="noopener noreferrer"
           className="flex items-center gap-2 px-4 py-2 rounded-xl border transition hover:text-red-800"
         >
-          <span>4.3 ★</span>
+          <span>{dictionary.testimonials?.ratings.google}</span>
           <SiGooglemaps className="text-red-500 text-xl" />
         </a>
 
@@ -282,7 +296,7 @@ export default function Testimonials() {
           rel="noopener noreferrer"
           className="flex items-center gap-2 px-4 py-2 rounded-xl border transition hover:text-red-800"
         >
-          <span>4 ★</span>
+          <span>{dictionary.testimonials?.ratings.tripadvisor}</span>
           <FaTripadvisor className="text-green-500 text-xl" />
         </a>
       </div>

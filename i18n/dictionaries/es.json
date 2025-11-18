@@ -1,0 +1,128 @@
+{
+  "hero": {
+    "subtitle": "Desde 1996 ofreciendo el auténtico sabor de las pizzas italianas en Santa Cruz",
+    "menuButton": "Menú"
+  },
+  "navigation": {
+    "home": "Inicio",
+    "pizzeria": "Pizzería",
+    "menu": "Menú",
+    "testimonials": "Testimonios",
+    "contacts": "Contacto",
+    "ariaLabels": {
+      "openMenu": "Abrir menú",
+      "closeMenu": "Cerrar menú",
+      "homePage": "Página de inicio",
+      "callPhone": "Llamar al +351 261 937 695"
+    }
+  },
+  "restaurant": {
+    "mainTitle": "La vista es gratis y la simpatía también",
+    "catchphrase": "Si no nos conoce es porque no debe ser de por aquí",
+    "description1": "Abiertos al público desde hace casi 30 años, nuestra pizzería ya forma parte de la rutina de quienes conocen Santa Cruz. Puede contar con nosotros para deliciosas pizzas italianas y también para recetas de cocina portuguesa e italiana.",
+    "description2": "Venga a conocernos. Quédese con nosotros o venga a recoger para llevar, y saboree nuestras pizzas inmerso en el paisaje de Santa Cruz."
+  },
+  "pizzas": {
+    "title": "Descubre nuestras pizzas y más",
+    "items": {
+      "parma": {
+        "name": "Pizza Parma",
+        "ingredients": "tomate • queso • jamón"
+      },
+      "padovana": {
+        "name": "Pizza Padovana",
+        "ingredients": "tomate • queso • salchicha de lomo"
+      },
+      "bacon": {
+        "name": "Pizza Bacon",
+        "ingredients": "tomate • queso • bacon"
+      },
+      "margherita": {
+        "name": "Pizza Margherita",
+        "ingredients": "tomate • queso"
+      },
+      "salame": {
+        "name": "Pizza Salame",
+        "ingredients": "tomate • queso • salami"
+      },
+      "funghi": {
+        "name": "Pizza Champiñones",
+        "ingredients": "tomate • queso • champiñones"
+      }
+    }
+  },
+  "home": {
+    "title": "Bienvenido",
+    "description": "Descripción en español"
+  },
+  "testimonials": {
+    "title": "Lo que dicen nuestros clientes",
+    "ariaLabels": {
+      "previous": "Reseña anterior",
+      "next": "Siguiente reseña",
+      "viewReview": "Ver reseña"
+    },
+    "ratings": {
+      "facebook": "99 %",
+      "google": "4.3 ★",
+      "tripadvisor": "4 ★"
+    }
+  },
+  "contact": {
+    "hours": {
+      "title": "Horarios",
+      "open": "Abiertos",
+      "openDays": "De martes a domingo",
+      "closed": "Cerrado",
+      "closedDay": "Lunes",
+      "lunch": "Almuerzo",
+      "lunchTime": "de 12h a 14h",
+      "dinner": "Cena",
+      "dinnerTime": "de 18h a 23h"
+    },
+    "info": {
+      "title": "Contactos",
+      "address": "Rua José Veríssimo, JMCL, 2560-409"
+    },
+    "whatsapp": {
+      "button": "💬 Hable con nosotros por WhatsApp"
+    },
+    "ariaLabels": {
+      "callPhone": "Llamar al +351 261 937 695",
+      "mapLocation": "Ubicación de Pizzería Mamma Mia en Google Maps"
+    }
+  },
+  "footer": {
+    "copyright": "© {year} FPR. Todos los derechos reservados"
+  },
+  "openingStatus": {
+    "status": {
+      "open": "Estamos abiertos",
+      "closed": "Estamos cerrados"
+    },
+    "buttons": {
+      "viewHours": "Ver nuestros horarios",
+      "close": "Cerrar"
+    },
+    "ariaLabels": {
+      "open": "Ver horarios de apertura",
+      "close": "Cerrar horarios de apertura"
+    },
+    "hours": {
+      "title": "Horario de Apertura",
+      "weekdays": "Martes a Domingo:",
+      "lunch": "Almuerzo",
+      "lunchTime": "12:00 - 14:00",
+      "dinner": "Cena",
+      "dinnerTime": "18:00 - 23:00",
+      "monday": "Lunes:",
+      "closed": "Cerrado"
+    },
+    "nextOpening": {
+      "weOpen": "Abrimos",
+      "todayLunch": "hoy a las 12:00",
+      "todayDinner": "hoy a las 18:00",
+      "tomorrowLunch": "mañana a las 12:00"
+    }
+  }
+}
