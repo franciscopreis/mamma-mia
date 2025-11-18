@@ -3,9 +3,9 @@ import { useEffect, useState } from 'react'
 import Image from 'next/image'
 
 const images = [
-  '/pizza-salame.png',
-  '/pizza-deseree.png',
-  '/pizza-salame.png',
+  '/pizza-salame.webp',
+  '/pizza-deseree.webp',
+  '/pizza-prociuto-funghi.webp',
   '/pizza-hawai.jpg',
 ]
 
