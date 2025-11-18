@@ -1,6 +1,6 @@
 'use client'
 
-import Logo from '@/components/Logo'
+import Logo from '@/components/navbar/Logo'
 
 interface NavbarLogoProps {
   className?: string

@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
-import { IoMdCall } from 'react-icons/io'
+import { Phone } from '@/components/ui/Icons'
 import NavbarLinks from './NavbarLinks'
 import MobileMenu from './MobileMenu'
 import NavbarLogo from './NavbarLogo'
@@ -13,14 +13,18 @@ export default function Navbar() {
   const params = useParams()
   const { dictionary } = useDictionary()
 
+  // ✅ Obtém o idioma atual dos params
+  const currentLang = params.lang as string
+
   if (!dictionary) return null
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-emerald-600 shadow-md">
       <nav className="mx-auto flex items-center justify-between py-2 w-full max-w-7xl px-4 min-h-14">
         {/* Logo - SEMPRE à esquerda */}
+        {/* ✅ CORREÇÃO: Usa o idioma atual no href */}
         <Link
-          href="/"
+          href={`/${currentLang}`}
           aria-label={dictionary.navigation.ariaLabels.homePage}
           className="flex flex-shrink-0 mx-2 md:mx-4"
         >
@@ -36,7 +40,7 @@ export default function Navbar() {
         <div className="flex items-center gap-2 md:gap-4">
           {/* Language Switcher */}
           <div className="flex-shrink-0">
-            <LanguageSwitcher currentLang={params.lang as string} />
+            <LanguageSwitcher currentLang={currentLang} />
           </div>
 
           {/* Telefone desktop - ícone + número */}
@@ -46,7 +50,7 @@ export default function Navbar() {
               className="flex items-center text-emerald-700 hover:text-red-700 transition-colors hover:scale-105"
               aria-label={dictionary.navigation.ariaLabels.callPhone}
             >
-              <IoMdCall className="text-xl sm:text-2xl" />
+              <Phone className="text-xl sm:text-2xl" />
               <span className="ml-2 text-sm">+351 261 937 695</span>
             </Link>
           </div>
@@ -58,7 +62,7 @@ export default function Navbar() {
               className="flex items-center text-emerald-700 hover:text-red-700 transition-colors hover:scale-105"
               aria-label={dictionary.navigation.ariaLabels.callPhone}
             >
-              <IoMdCall className="text-xl sm:text-2xl" />
+              <Phone className="text-xl sm:text-2xl" />
             </Link>
           </div>
 

@@ -2,12 +2,12 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react'
 import {
-  FaTripadvisor,
-  FaFacebook,
-  FaChevronRight,
-  FaChevronLeft,
-} from 'react-icons/fa'
-import { SiGooglemaps } from 'react-icons/si'
+  ChevronLeft,
+  ChevronRight,
+  Tripadvisor,
+  Facebook,
+  GoogleMaps,
+} from '@/components/ui/Icons'
 import ScrollParallax from './ScrollParallax'
 import { useDictionary } from '@/hooks/useDictionary'
 
@@ -200,7 +200,7 @@ export default function Testimonials() {
             onClick={prev}
             className="px-4 py-2 h-8 rounded-lg hover:text-red-800 transition cursor-pointer hidden md:block"
           >
-            <FaChevronLeft />
+            <ChevronLeft />
           </button>
 
           <div
@@ -229,13 +229,13 @@ export default function Testimonials() {
               <p className="mt-4 font-semibold text-center">
                 {reviews[index].author}
                 {reviews[index].platform === 'Trip Advisor' && (
-                  <FaTripadvisor className="inline-block text-green-600 ml-2 relative bottom-0.5" />
+                  <Tripadvisor className="inline-block text-green-600 ml-2 relative bottom-0.5" />
                 )}
                 {reviews[index].platform === 'Facebook' && (
-                  <FaFacebook className="inline-block text-blue-600 ml-2 relative bottom-0.5" />
+                  <Facebook className="inline-block text-blue-600 ml-2 relative bottom-0.5" />
                 )}
                 {reviews[index].platform === 'Google Maps' && (
-                  <SiGooglemaps className="inline-block text-red-600 ml-2 relative bottom-0.5" />
+                  <GoogleMaps className="inline-block text-red-600 ml-2 relative bottom-0.5" />
                 )}
               </p>
             </div>
@@ -246,7 +246,7 @@ export default function Testimonials() {
             onClick={next}
             className="px-4 py-2 rounded-lg hover:text-red-800 transition cursor-pointer hidden md:block"
           >
-            <FaChevronRight />
+            <ChevronRight />
           </button>
         </div>
       </div>
@@ -277,7 +277,7 @@ export default function Testimonials() {
           className="flex items-center gap-2 border px-4 py-2 rounded-xl transition hover:text-red-800"
         >
           <span>{dictionary.testimonials?.ratings.facebook}</span>
-          <FaFacebook className="text-blue-500 text-xl" />
+          <Facebook className="text-blue-500 text-xl" />
         </a>
 
         <a
@@ -287,7 +287,7 @@ export default function Testimonials() {
           className="flex items-center gap-2 px-4 py-2 rounded-xl border transition hover:text-red-800"
         >
           <span>{dictionary.testimonials?.ratings.google}</span>
-          <SiGooglemaps className="text-red-500 text-xl" />
+          <GoogleMaps className="text-red-500 text-xl" />
         </a>
 
         <a
@@ -297,7 +297,7 @@ export default function Testimonials() {
           className="flex items-center gap-2 px-4 py-2 rounded-xl border transition hover:text-red-800"
         >
           <span>{dictionary.testimonials?.ratings.tripadvisor}</span>
-          <FaTripadvisor className="text-green-500 text-xl" />
+          <Tripadvisor className="text-green-500 text-xl" />
         </a>
       </div>
     </section>

@@ -20,7 +20,7 @@ const items: Pizza[] = [
   {
     number: '0A',
     nameKey: 'pizzas.items.parma.name',
-    img: '/facebook/0A-pizza-parma.jpg',
+    img: '/facebook/0A-pizza-parma.webp',
     ingredientsKey: 'pizzas.items.parma.ingredients',
     price: '17.90',
     category: 'pizzas',
@@ -28,7 +28,7 @@ const items: Pizza[] = [
   {
     number: '0B',
     nameKey: 'pizzas.items.padovana.name',
-    img: '/facebook/0B-pizza-padovana.jpg',
+    img: '/facebook/0B-pizza-padovana.webp',
     ingredientsKey: 'pizzas.items.padovana.ingredients',
     price: '18.90',
     category: 'pizzas',
@@ -36,7 +36,7 @@ const items: Pizza[] = [
   {
     number: '0C',
     nameKey: 'pizzas.items.bacon.name',
-    img: '/facebook/0C-pizza-bacon.jpg',
+    img: '/facebook/0C-pizza-bacon.webp',
     ingredientsKey: 'pizzas.items.bacon.ingredients',
     price: '16.90',
     category: 'pizzas',
@@ -44,7 +44,7 @@ const items: Pizza[] = [
   {
     number: '1',
     nameKey: 'pizzas.items.margherita.name',
-    img: '/facebook/1-pizza-margarita.jpg',
+    img: '/facebook/1-pizza-margarita.webp',
     ingredientsKey: 'pizzas.items.margherita.ingredients',
     price: '16.90',
     category: 'pizzas',
@@ -52,7 +52,7 @@ const items: Pizza[] = [
   {
     number: '2',
     nameKey: 'pizzas.items.salame.name',
-    img: '/facebook/2-pizza-salame.jpg',
+    img: '/facebook/2-pizza-salame.webp',
     ingredientsKey: 'pizzas.items.salame.ingredients',
     price: '16.90',
     category: 'pizzas',
@@ -60,7 +60,7 @@ const items: Pizza[] = [
   {
     number: '3',
     nameKey: 'pizzas.items.funghi.name',
-    img: '/facebook/3-pizza-funghi.jpg',
+    img: '/facebook/3-pizza-funghi.webp',
     ingredientsKey: 'pizzas.items.funghi.ingredients',
     price: '16.90',
     category: 'pizzas',
@@ -119,13 +119,15 @@ export default function Pizzas() {
         <div className="grid grid-cols-2 md:grid-cols-3">
           {items.map((p) => (
             <div key={p.nameKey} className="flex flex-col items-center p-3">
-              <div className="relative mb-4 lg:px-5 lg:pt-5">
+              <div className="relative mb-4 lg:px-5 lg:pt-5 w-full aspect-4/3">
                 <Image
                   src={p.img}
                   alt={getNestedValue(dictionary, p.nameKey)}
-                  width={800}
-                  height={500}
-                  className="object-cover rounded-xl"
+                  width={309}
+                  height={232}
+                  sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw"
+                  quality={75}
+                  className="object-cover rounded-xl w-full h-full"
                 />
               </div>
               <h3 className="md:text-xl text-sm font-medium mb-2 text-emerald-800 tracking-wider leading-tight">

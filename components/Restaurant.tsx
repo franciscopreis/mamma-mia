@@ -48,7 +48,7 @@ export default function Restaurant() {
       </div>
 
       {/* CARROSSEL */}
-      <div className="mt-5">
+      <div className="mt-5  min-h-[120px] md:min-h-[160px]">
         <ContinuousCarousel />
       </div>
 

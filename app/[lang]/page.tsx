@@ -1,36 +1,41 @@
-import Hero from '@/components/Hero'
-import Pizzas from '@/components/Pizzas'
-import Testimonials from '@/components/Testimonials'
+import Hero from '@/components/Hero/Hero'
 import Restaurant from '@/components/Restaurant'
 import Contact from '@/components/Contact'
 import Footer from '@/components/Footer'
 
-// ✅ Interface para params
-interface HomePageProps {
+// ✅ LAZY LOAD de componentes pesados
+import dynamic from 'next/dynamic'
+
+const Pizzas = dynamic(() => import('@/components/Pizzas'), {
+  loading: () => <div className="h-96 bg-amber-200/30 animate-pulse" />,
+})
+
+const Testimonials = dynamic(() => import('@/components/Testimonials'), {
+  loading: () => (
+    <section className="py-15 w-full bg-emerald-100">
+      <div className="animate-pulse max-w-3xl mx-auto px-4">
+        <div className="h-8 bg-gray-300 rounded mb-10"></div>
+        <div className="h-20 bg-gray-300 rounded"></div>
+      </div>
+    </section>
+  ),
+})
+
+// ✅ INTERFACE CORRETA
+interface PageProps {
   params: Promise<{ lang: string }>
 }
 
-export default async function Page({ params }: HomePageProps) {
-  // ✅ Obter o idioma dos params (necessário para generateStaticParams)
+export default async function Page({ params }: PageProps) {
   const { lang } = await params
 
   return (
     <>
-      {/* ❌ NÃO precisa passar lang - os componentes usam useDictionary() */}
       <Hero />
-
       <Restaurant />
-
       <Pizzas />
-
-      {/* <Featured /> */}
-
       <Testimonials />
-
-      {/* <About /> */}
-
       <Contact />
-
       <Footer />
     </>
   )

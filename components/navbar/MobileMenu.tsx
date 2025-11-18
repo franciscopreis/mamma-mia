@@ -1,8 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { IoClose } from 'react-icons/io5'
-import { GiHamburgerMenu } from 'react-icons/gi'
+import { Menu, Close } from '@/components/ui/Icons'
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
 import { useDictionary } from '@/hooks/useDictionary'
@@ -54,7 +53,7 @@ function MobileMenuContent() {
           aria-label="Abrir menu"
           className="text-emerald-600 cursor-pointer flex items-center justify-center p-2"
         >
-          <GiHamburgerMenu className="text-2xl" />
+          <Menu className="text-2xl" />
         </button>
       </div>
     )
@@ -68,7 +67,7 @@ function MobileMenuContent() {
           aria-label="Abrir menu"
           className="text-emerald-600 cursor-pointer flex items-center justify-center p-2"
         >
-          <GiHamburgerMenu className="text-2xl" />
+          <Menu className="text-2xl" />
         </button>
       </div>
     )
@@ -96,9 +95,9 @@ function MobileMenuContent() {
         }
       >
         {isOpen ? (
-          <IoClose className="text-2xl" />
+          <Close className="text-2xl" />
         ) : (
-          <GiHamburgerMenu className="text-2xl" />
+          <Menu className="text-2xl" />
         )}
       </button>
 
