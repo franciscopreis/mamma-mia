@@ -17,6 +17,9 @@ export const metadata = {
   title: 'Pizzeria Mamma Mia',
   description:
     'Pizzas com o autêntico sabor das pizzas italianas em Santa Cruz',
+  icons: {
+    icon: '/logo.svg',
+  },
 }
 
 export default function RootLayout({
