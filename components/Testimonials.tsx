@@ -274,7 +274,7 @@ export default function Testimonials() {
           href="https://www.facebook.com/mammamia.sta.cruz"
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center gap-2 border px-4 py-2 rounded-xl transition hover:text-red-800"
+          className="flex items-center gap-2 border px-4 py-2 rounded-xl transition text-red-800"
         >
           <span>{dictionary.testimonials?.ratings.facebook}</span>
           <Facebook className="text-blue-500 text-xl" />
@@ -284,7 +284,7 @@ export default function Testimonials() {
           href="https://www.google.com/maps/place/Pizzeria+Mamma+Mia/@39.1337248,-9.3868453,17z/data=!4m6!3m5!1s0xd1f31bebc2b8daf:0x8d7fd173ee42c87e!8m2!3d39.1337207!4d-9.3819744!16s%2Fg%2F11c0w0hxrr?entry=ttu&g_ep=EgoyMDI5MTExMi4wIKXMDSoASAFQAw%3D%3D"
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center gap-2 px-4 py-2 rounded-xl border transition hover:text-red-800"
+          className="flex items-center gap-2 px-4 py-2 rounded-xl border transition text-red-800"
         >
           <span>{dictionary.testimonials?.ratings.google}</span>
           <GoogleMaps className="text-red-500 text-xl" />
@@ -294,7 +294,7 @@ export default function Testimonials() {
           href="https://www.tripadvisor.com/Restaurant_Review-g656858-d4783857-Reviews-Pizzeria_Mamma_Mia-Torres_Vedras_Lisbon_District_Central_Portugal.html"
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center gap-2 px-4 py-2 rounded-xl border transition hover:text-red-800"
+          className="flex items-center gap-2 px-4 py-2 rounded-xl border transition text-red-800"
         >
           <span>{dictionary.testimonials?.ratings.tripadvisor}</span>
           <Tripadvisor className="text-green-500 text-xl" />

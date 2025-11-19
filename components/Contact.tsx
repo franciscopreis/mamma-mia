@@ -4,6 +4,7 @@ import Image from 'next/image'
 import ScrollParallax from './ScrollParallax'
 import Link from 'next/link'
 import { useDictionary } from '@/hooks/useDictionary'
+import { WhatsApp } from './ui/Icons'
 
 export default function Contact() {
   const { dictionary, loading } = useDictionary()
@@ -119,6 +120,7 @@ export default function Contact() {
             rel="noopener noreferrer"
             className="inline-block bg-green-500 text-white font-semibold px-6 py-3 rounded-full shadow-lg hover:bg-green-600 transition transform hover:scale-105"
           >
+            <WhatsApp className="inline" />{' '}
             {dictionary.contact?.whatsapp.button}
           </a>
         </div>

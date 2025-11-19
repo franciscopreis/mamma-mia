@@ -1,11 +1,10 @@
-// src/hooks/useDictionary.ts
+// hooks/useDictionary.ts - VOLTA À VERSÃO ORIGINAL
 'use client'
 
 import { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
 import type { Dictionary, SupportedLocale } from '@/i18n/types'
 
-// ✅ Se NÃO tiver o LoadingProvider, use esta versão:
 export function useDictionary() {
   const params = useParams()
   const [dictionary, setDictionary] = useState<Dictionary | null>(null)
@@ -18,6 +17,7 @@ export function useDictionary() {
       setLoading(true)
 
       try {
+        // ✅ REMOVE o ?ts= - volta ao original
         const dict = await import(`@/i18n/dictionaries/${lang}.json`)
         setDictionary(dict.default as Dictionary)
       } catch (error) {

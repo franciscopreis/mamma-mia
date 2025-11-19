@@ -1,7 +1,5 @@
 'use client'
 
-import AutoCarousel from './AutoCarousel'
-import CinematicImageReveal from './CinematicImageReveal'
 import ContinuousCarousel from './ContinuousCarousel'
 import ScrollParallax from './ScrollParallax'
 import { useDictionary } from '@/hooks/useDictionary'
@@ -32,8 +30,8 @@ export default function Restaurant() {
 
   return (
     <section className="py-15 px-5 md:px-10" id="restaurant">
-      {/* TITULOS PRINCIPAIS */}
-      <div className="max-w-4xl mx-auto flex flex-col min-h-[120px]">
+      {/* TITULOS PRINCIPAIS*/}
+      <div className="max-w-4xl mx-auto flex flex-col aspect-video/4">
         <ScrollParallax startY={30} delay={100}>
           <h2 className="text-center text-3xl md:text-4xl tracking-wide italic font-serif text-red-800 leading-snug">
             {dictionary.restaurant.mainTitle}
@@ -41,15 +39,13 @@ export default function Restaurant() {
         </ScrollParallax>
       </div>
 
-      {/* CARROSSEL */}
-      <div className="mt-5 min-h-[120px] md:min-h-[160px]">
+      {/* CARROSSEL*/}
+      <div className="mt-5 min-h-[120px] md:min-h-40">
         <ContinuousCarousel />
       </div>
 
-      {/* SUBTITULOS */}
-      <div className="flex flex-col max-w-3xl mx-auto py-2 text-lg gap-3 text-justify min-h-[200px]">
-        {' '}
-        {/* ← ADICIONA */}
+      {/* SUBTITULOS*/}
+      <div className="flex flex-col max-w-3xl mx-auto py-2 text-lg gap-3 text-justify">
         <p className="text-lg tracking-widest leading-loose font-semibold text-emerald-800">
           {dictionary.restaurant.catchphrase}
         </p>

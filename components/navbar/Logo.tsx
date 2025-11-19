@@ -1,3 +1,4 @@
+// Logo.tsx ATUALIZADO
 import Image from 'next/image'
 
 export default function Logo() {
@@ -6,17 +7,16 @@ export default function Logo() {
       <Image
         src="/logo.png"
         alt="Pizzeria Mamma Mia"
-        width={80}
-        height={80}
-        className="w-10  lg:w-10"
+        width={40}
+        height={40}
+        className="w-10 h-10 lg:w-10 lg:h-10"
       />
-
       <Image
         src="/mamma-mia-lettering.png"
         alt="Pizzeria Mamma Mia"
-        width={150}
-        height={80}
-        className="w-20  lg:w-30"
+        width={120}
+        height={40}
+        className="w-20 h-5 lg:w-30 lg:h-8"
       />
     </div>
   )
