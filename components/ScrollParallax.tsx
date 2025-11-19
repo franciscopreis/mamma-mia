@@ -28,8 +28,8 @@ export default function ScrollParallax({
         }
       },
       {
-        threshold: 0.2,
-        rootMargin: '0px 0px -50px 0px',
+        threshold: 0.1, // ← REDUZIDO para trigger mais cedo
+        rootMargin: '50px 0px 0px 0px', // ← ADICIONADO margem superior
       }
     )
 
@@ -43,12 +43,13 @@ export default function ScrollParallax({
   return (
     <div
       ref={ref}
+      className="will-change-transform" // ← ADICIONADO para performance
       style={{
         transform: isVisible
           ? 'translate(0, 0)'
           : `translate(${startX}px, ${startY}px)`,
         opacity: isVisible ? 1 : 0,
-        transition: 'all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+        transition: 'all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)', // ← REDUZIDO tempo
       }}
     >
       {children}

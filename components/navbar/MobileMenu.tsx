@@ -111,7 +111,7 @@ function MobileMenuContent() {
               key={link.href}
               href={link.href}
               onClick={() => setIsOpen(false)}
-              className="px-4 py-3 text-emerald-800 hover:bg-emerald-50 border-b border-emerald-100 last:border-b-0"
+              className="px-4 py-3 text-emerald-800 hover:bg-emerald-50 border-b border-emerald-100 last:border-b-0 cursor-pointer"
             >
               {link.label}
             </Link>
