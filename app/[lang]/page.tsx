@@ -1,25 +1,22 @@
+// pagelayout.tsx
+
 import Hero from '@/components/Hero/Hero'
 import Restaurant from '@/components/Restaurant'
 import Footer from '@/components/Footer'
-
-// ✅ Skeletons
-import HeroSkeleton from '@/components/skeletons/HeroSkeleton'
-import TestimonialsSkeleton from '@/components/skeletons/TestimonialsSkeleton'
-import ContactSkeleton from '@/components/skeletons/ContactSkeleton'
-import RestaurantSkeleton from '@/components/skeletons/RestaurantSkeleton'
-// ✅ LAZY LOAD de componentes pesados
+import SkeletonSection from '@/components/skeletons/SkeletonSection'
 import dynamic from 'next/dynamic'
 
+// ✅ LAZY LOAD componentes pesados com SkeletonSection
 const Pizzas = dynamic(() => import('@/components/Pizzas'), {
-  loading: () => <div className="h-96 bg-amber-200/30 animate-pulse" />,
+  loading: () => <SkeletonSection type="pizzas" />,
 })
 
 const Testimonials = dynamic(() => import('@/components/Testimonials'), {
-  loading: () => <TestimonialsSkeleton />,
+  loading: () => <SkeletonSection type="testimonials" />,
 })
 
 const Contact = dynamic(() => import('@/components/Contact'), {
-  loading: () => <ContactSkeleton />,
+  loading: () => <SkeletonSection type="contact" />,
 })
 
 // ✅ INTERFACE CORRETA

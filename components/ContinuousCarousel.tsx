@@ -11,8 +11,7 @@ export default function ContinuousCarousel() {
     '/mamma-mia-vista.webp',
   ]
 
-  // Duplicar imagens para efeito loop contínuo
-  const loopedImages = [...images, ...images]
+  const looped = [...images, ...images] // efeito loop
 
   return (
     <div className="overflow-hidden relative w-full py-5">
@@ -26,7 +25,7 @@ export default function ContinuousCarousel() {
           ease: 'linear',
         }}
       >
-        {loopedImages.map((src, i) => (
+        {looped.map((src, i) => (
           <div
             key={i}
             className="flex-shrink-0 w-[50vw] md:w-[35vw] lg:w-[25vw] aspect-[4/3] relative"
@@ -36,9 +35,9 @@ export default function ContinuousCarousel() {
               alt={`Imagem ${i + 1}`}
               fill
               sizes="(max-width: 768px) 50vw, (max-width: 1024px) 35vw, 25vw"
-              className="object-cover "
+              className="object-cover"
               quality={70}
-              priority={i < 2} // carrega rápido as primeiras imagens
+              priority={i < 2}
             />
           </div>
         ))}

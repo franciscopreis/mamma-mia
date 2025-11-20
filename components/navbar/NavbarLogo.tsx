@@ -1,6 +1,7 @@
+// NavbarLogo.tsx (opcional, se quiser hover/efeitos)
 'use client'
 
-import Logo from '@/components/navbar/Logo'
+import Logo from './Logo'
 
 interface NavbarLogoProps {
   className?: string

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useState, useEffect, useCallback, useRef, ReactElement } from 'react'
 import {
   ChevronLeft,
   ChevronRight,
@@ -11,7 +11,7 @@ import {
 import ScrollParallax from './ScrollParallax'
 import { useDictionary } from '@/hooks/useDictionary'
 
-// ✅ Reviews mantidas nos idiomas originais
+// ---------------- HARD-CODED REVIEWS ----------------
 const reviews = [
   {
     text: 'Recomendo todo o serviço, desde o atendimento rápido até à simpatia da equipa, passando pela qualidade das pizzas.',
@@ -45,15 +45,27 @@ const reviews = [
   },
 ]
 
+// ---------------- PLATFORM ICONS ----------------
+const platformIcons: Record<string, ReactElement> = {
+  'Trip Advisor': (
+    <Tripadvisor className="inline-block text-green-600 ml-2 bottom-0.5" />
+  ),
+  Facebook: <Facebook className="inline-block text-blue-600 ml-2 bottom-0.5" />,
+  'Google Maps': (
+    <GoogleMaps className="inline-block text-red-600 ml-2 bottom-0.5" />
+  ),
+}
+
 export default function Testimonials() {
+  const { dictionary } = useDictionary()
   const [index, setIndex] = useState(0)
   const [isVisible, setIsVisible] = useState(true)
   const [isDragging, setIsDragging] = useState(false)
   const [startX, setStartX] = useState(0)
   const [currentX, setCurrentX] = useState(0)
   const touchAreaRef = useRef<HTMLDivElement>(null)
-  const { dictionary } = useDictionary()
 
+  // ---------------- NAVIGATION ----------------
   const next = useCallback(() => {
     setIsVisible(false)
     setTimeout(() => {
@@ -78,7 +90,7 @@ export default function Testimonials() {
     }, 300)
   }, [])
 
-  // Touch event handlers (mantidos iguais)
+  // ---------------- DRAG / SWIPE ----------------
   const handleTouchStart = useCallback((e: React.TouchEvent) => {
     setIsDragging(true)
     setStartX(e.touches[0].clientX)
@@ -95,24 +107,13 @@ export default function Testimonials() {
 
   const handleTouchEnd = useCallback(() => {
     if (!isDragging) return
-
     const diff = startX - currentX
-    const minSwipeDistance = 50
-
-    if (Math.abs(diff) > minSwipeDistance) {
-      if (diff > 0) {
-        next()
-      } else {
-        prev()
-      }
-    }
-
+    if (Math.abs(diff) > 50) (diff > 0 ? next : prev)()
     setIsDragging(false)
     setStartX(0)
     setCurrentX(0)
   }, [isDragging, startX, currentX, next, prev])
 
-  // Mouse event handlers (mantidos iguais)
   const handleMouseDown = useCallback((e: React.MouseEvent) => {
     setIsDragging(true)
     setStartX(e.clientX)
@@ -129,18 +130,8 @@ export default function Testimonials() {
 
   const handleMouseUp = useCallback(() => {
     if (!isDragging) return
-
     const diff = startX - currentX
-    const minSwipeDistance = 50
-
-    if (Math.abs(diff) > minSwipeDistance) {
-      if (diff > 0) {
-        next()
-      } else {
-        prev()
-      }
-    }
-
+    if (Math.abs(diff) > 50) (diff > 0 ? next : prev)()
     setIsDragging(false)
     setStartX(0)
     setCurrentX(0)
@@ -153,6 +144,7 @@ export default function Testimonials() {
     return `translateX(${boundedDiff * 0.5}px)`
   }
 
+  // ---------------- AUTO ADVANCE ----------------
   useEffect(() => {
     const timer = setInterval(next, 5000)
     return () => clearInterval(timer)
@@ -171,70 +163,62 @@ export default function Testimonials() {
     )
   }
 
+  // ---------------- RENDER ----------------
   return (
     <section className="relative py-15 w-full bg-emerald-100" id="testimonials">
-      <div className="relative">
-        <ScrollParallax startY={30} delay={100}>
-          <h2 className="text-center text-3xl md:text-4xl tracking-wide italic font-serif text-red-800 leading-snug mb-10">
-            {dictionary.testimonials?.title}
-          </h2>
-        </ScrollParallax>
+      <ScrollParallax startY={30} delay={100}>
+        <h2 className="text-center text-3xl md:text-4xl tracking-wide italic font-serif text-red-800 leading-snug mb-10">
+          {dictionary.testimonials?.title}
+        </h2>
+      </ScrollParallax>
 
-        <div className="flex flex-row lg:max-w-3xl mx-auto items-center">
-          <button
-            aria-label={dictionary.testimonials?.ariaLabels.previous}
-            onClick={prev}
-            className="px-4 py-2 h-8 rounded-lg hover:text-red-800 transition cursor-pointer hidden md:block"
-          >
-            <ChevronLeft />
-          </button>
+      <div className="flex flex-row lg:max-w-3xl mx-auto items-center">
+        <button
+          aria-label={dictionary.testimonials?.ariaLabels.previous}
+          onClick={prev}
+          className="px-4 py-2 h-8 rounded-lg hover:text-red-800 transition cursor-pointer hidden md:block"
+        >
+          <ChevronLeft />
+        </button>
 
+        <div
+          ref={touchAreaRef}
+          className="h-40 flex items-center justify-center text-sm max-w-xs lg:max-w-xl mx-auto touch-pan-y select-none"
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
+          onMouseLeave={handleMouseUp}
+          style={{ cursor: isDragging ? 'grabbing' : 'grab' }}
+        >
           <div
-            ref={touchAreaRef}
-            className="h-40 flex items-center justify-center text-sm max-w-xs lg:max-w-xl mx-auto touch-pan-y select-none"
-            onTouchStart={handleTouchStart}
-            onTouchMove={handleTouchMove}
-            onTouchEnd={handleTouchEnd}
-            onMouseDown={handleMouseDown}
-            onMouseMove={handleMouseMove}
-            onMouseUp={handleMouseUp}
-            onMouseLeave={handleMouseUp}
-            style={{ cursor: isDragging ? 'grabbing' : 'grab' }}
+            className={`transition-all duration-300 ${
+              isVisible ? 'opacity-100' : 'opacity-0'
+            }`}
+            style={{
+              transform: isDragging ? getDragTransform() : 'translateX(0)',
+              transition: isDragging ? 'none' : 'all 0.3s ease',
+            }}
           >
-            <div
-              className={`transition-all duration-300 ${isVisible ? 'opacity-100' : 'opacity-0'}`}
-              style={{
-                transform: isDragging ? getDragTransform() : 'translateX(0)',
-                transition: isDragging ? 'none' : 'all 0.3s ease',
-              }}
-            >
-              {/* ✅ Reviews mantidas nos idiomas originais */}
-              <p className="italic md:max-w-xl text-center lg:text-base text-sm">
-                {reviews[index].text}
-              </p>
-              <p className="mt-4 font-semibold text-center">
-                {reviews[index].author}
-                {reviews[index].platform === 'Trip Advisor' && (
-                  <Tripadvisor className="inline-block text-green-600 ml-2 relative bottom-0.5" />
-                )}
-                {reviews[index].platform === 'Facebook' && (
-                  <Facebook className="inline-block text-blue-600 ml-2 relative bottom-0.5" />
-                )}
-                {reviews[index].platform === 'Google Maps' && (
-                  <GoogleMaps className="inline-block text-red-600 ml-2 relative bottom-0.5" />
-                )}
-              </p>
-            </div>
+            <p className="italic md:max-w-xl text-center lg:text-base text-sm">
+              {reviews[index].text}
+            </p>
+            <p className="mt-4 font-semibold text-center">
+              {reviews[index].author}
+              {platformIcons[reviews[index].platform]}
+            </p>
           </div>
-
-          <button
-            aria-label={dictionary.testimonials?.ariaLabels.next}
-            onClick={next}
-            className="px-4 py-2 rounded-lg hover:text-red-800 transition cursor-pointer hidden md:block"
-          >
-            <ChevronRight />
-          </button>
         </div>
+
+        <button
+          aria-label={dictionary.testimonials?.ariaLabels.next}
+          onClick={next}
+          className="px-4 py-2 rounded-lg hover:text-red-800 transition cursor-pointer hidden md:block"
+        >
+          <ChevronRight />
+        </button>
       </div>
 
       {/* BOLINHAS */}
@@ -255,6 +239,7 @@ export default function Testimonials() {
         </div>
       </div>
 
+      {/* Ratings */}
       <div className="flex flex-wrap justify-center gap-6 mt-10 mb-5 text-emerald-600 font-semibold">
         <a
           href="https://www.facebook.com/mammamia.sta.cruz"

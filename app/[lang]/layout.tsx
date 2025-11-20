@@ -1,3 +1,4 @@
+//app/[lang]/layout.tsx
 import { Montserrat, Roboto } from 'next/font/google'
 import '@/app/globals.css'
 import Navbar from '@/components/navbar/Navbar'

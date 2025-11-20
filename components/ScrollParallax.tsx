@@ -26,8 +26,8 @@ export default function ScrollParallax({
         }
       },
       {
-        threshold: 0.1, // mantido
-        rootMargin: '50px 0px 0px 0px', // mantido
+        threshold: 0.1,
+        rootMargin: '50px 0px 0px 0px',
       }
     )
 
@@ -38,14 +38,9 @@ export default function ScrollParallax({
   return (
     <div
       ref={ref}
+      style={{ opacity: animate ? 1 : 0, transition: 'opacity 0.5s ease' }}
       className="will-change-transform relative"
-      // ⚠️ container nunca desloca → sem CLS
-      style={{
-        opacity: animate ? 1 : 0,
-        transition: 'opacity 0.5s ease',
-      }}
     >
-      {/* movimento ocorre AQUI → não altera layout → zero CLS */}
       <div
         style={{
           transform: animate

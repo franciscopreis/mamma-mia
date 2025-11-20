@@ -1,4 +1,4 @@
-// Logo.tsx ATUALIZADO
+// Logo.tsx
 import Image from 'next/image'
 
 export default function Logo() {
@@ -9,14 +9,14 @@ export default function Logo() {
         alt="Pizzeria Mamma Mia"
         width={40}
         height={40}
-        className="w-10 h-10 lg:w-10 lg:h-10"
+        className="w-10 h-10" // fixo, mantém proporção
       />
       <Image
         src="/mamma-mia-lettering.png"
         alt="Pizzeria Mamma Mia"
         width={120}
         height={40}
-        className="w-20 h-5 lg:w-30 lg:h-8"
+        className="w-20 h-5" // fixo, mantém proporção
       />
     </div>
   )
