@@ -1,23 +1,6 @@
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
-  // images: {
-  //   remotePatterns: [
-  //     {
-  //       protocol: 'https',
-  //       hostname: '*.fbcdn.net',
-  //     },
-  //     {
-  //       protocol: 'https',
-  //       hostname: '*.fna.fbcdn.net',
-  //     },
-  //     {
-  //       protocol: 'https',
-  //       hostname: 'cdn-outdarego.ptisp.systems',
-  //     },
-  //   ],
-  // },
-
   experimental: {
     optimizeCss: true,
   },
@@ -28,12 +11,17 @@ const nextConfig: NextConfig = {
 
   async headers() {
     return [
+      // Existing Cache-Control headers
       {
         source: '/:path*',
         headers: [
           {
             key: 'Cache-Control',
             value: 'public, max-age=31536000, immutable',
+          },
+          {
+            key: 'X-Robots-Tag',
+            value: 'index, follow', // ✅ allow indexing
           },
         ],
       },
@@ -44,6 +32,10 @@ const nextConfig: NextConfig = {
             key: 'Cache-Control',
             value: 'public, max-age=0, must-revalidate',
           },
+          {
+            key: 'X-Robots-Tag',
+            value: 'index, follow', // ✅ allow indexing
+          },
         ],
       },
       {
@@ -52,6 +44,10 @@ const nextConfig: NextConfig = {
           {
             key: 'Cache-Control',
             value: 'public, max-age=0, must-revalidate',
+          },
+          {
+            key: 'X-Robots-Tag',
+            value: 'index, follow', // ✅ allow indexing
           },
         ],
       },
