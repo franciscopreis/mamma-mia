@@ -52,7 +52,7 @@ export default function Testimonials() {
   const [startX, setStartX] = useState(0)
   const [currentX, setCurrentX] = useState(0)
   const touchAreaRef = useRef<HTMLDivElement>(null)
-  const { dictionary, loading } = useDictionary()
+  const { dictionary } = useDictionary()
 
   const next = useCallback(() => {
     setIsVisible(false)
@@ -157,20 +157,6 @@ export default function Testimonials() {
     const timer = setInterval(next, 5000)
     return () => clearInterval(timer)
   }, [next])
-
-  if (loading) {
-    return (
-      <section
-        className="relative py-15 w-full bg-emerald-100"
-        id="testimonials"
-      >
-        <div className="animate-pulse max-w-3xl mx-auto px-4">
-          <div className="h-8 bg-gray-300 rounded mb-10"></div>
-          <div className="h-20 bg-gray-300 rounded"></div>
-        </div>
-      </section>
-    )
-  }
 
   if (!dictionary) {
     return (

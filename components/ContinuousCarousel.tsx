@@ -15,29 +15,30 @@ export default function ContinuousCarousel() {
   const loopedImages = [...images, ...images]
 
   return (
-    <div className="overflow-hidden relative w-full py-5 min-h-[120px] md:min-h-40">
+    <div className="overflow-hidden relative w-full py-5">
       <motion.div
-        className="flex"
+        className="flex will-change-transform"
         animate={{ x: ['0%', '-50%'] }}
         transition={{
           repeat: Infinity,
-          repeatType: 'loop', // Mudei para 'loop' para ser mais suave
-          duration: 40, // Aumentei a duração para ser menos intenso
+          repeatType: 'loop',
+          duration: 40,
           ease: 'linear',
         }}
       >
         {loopedImages.map((src, i) => (
           <div
             key={i}
-            className="flex-shrink-0 w-[50vw] md:w-[35vw] lg:w-[25vw] h-48 md:h-56 relative" // Reduzi a altura
+            className="flex-shrink-0 w-[50vw] md:w-[35vw] lg:w-[25vw] aspect-[4/3] relative"
           >
             <Image
               src={src}
               alt={`Imagem ${i + 1}`}
               fill
               sizes="(max-width: 768px) 50vw, (max-width: 1024px) 35vw, 25vw"
-              className="object-cover" // Adicionei bordas arredondadas
+              className="object-cover "
               quality={70}
+              priority={i < 2} // carrega rápido as primeiras imagens
             />
           </div>
         ))}

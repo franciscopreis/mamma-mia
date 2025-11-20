@@ -3,15 +3,7 @@
 import { useDictionary } from '@/hooks/useDictionary'
 
 export default function Footer() {
-  const { dictionary, loading } = useDictionary()
-
-  if (loading) {
-    return (
-      <footer className="py-10 text-center">
-        <div className="animate-pulse h-4 bg-gray-300 rounded max-w-xs mx-auto"></div>
-      </footer>
-    )
-  }
+  const { dictionary } = useDictionary()
 
   if (!dictionary) {
     return (

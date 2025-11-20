@@ -16,43 +16,47 @@ export default function ScrollParallax({
   delay = 0,
 }: ScrollParallaxProps) {
   const ref = useRef<HTMLDivElement>(null)
-  const [isVisible, setIsVisible] = useState(false)
+  const [animate, setAnimate] = useState(false)
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setTimeout(() => {
-            setIsVisible(true)
-          }, delay)
+          setTimeout(() => setAnimate(true), delay)
         }
       },
       {
-        threshold: 0.1, // ← REDUZIDO para trigger mais cedo
-        rootMargin: '50px 0px 0px 0px', // ← ADICIONADO margem superior
+        threshold: 0.1, // mantido
+        rootMargin: '50px 0px 0px 0px', // mantido
       }
     )
 
-    if (ref.current) {
-      observer.observe(ref.current)
-    }
-
+    if (ref.current) observer.observe(ref.current)
     return () => observer.disconnect()
   }, [delay])
 
   return (
     <div
       ref={ref}
-      className="will-change-transform" // ← ADICIONADO para performance
+      className="will-change-transform relative"
+      // ⚠️ container nunca desloca → sem CLS
       style={{
-        transform: isVisible
-          ? 'translate(0, 0)'
-          : `translate(${startX}px, ${startY}px)`,
-        opacity: isVisible ? 1 : 0,
-        transition: 'all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)', // ← REDUZIDO tempo
+        opacity: animate ? 1 : 0,
+        transition: 'opacity 0.5s ease',
       }}
     >
-      {children}
+      {/* movimento ocorre AQUI → não altera layout → zero CLS */}
+      <div
+        style={{
+          transform: animate
+            ? 'translate3d(0,0,0)'
+            : `translate3d(${startX}px, ${startY}px, 0)`,
+          transition: 'transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+          willChange: 'transform',
+        }}
+      >
+        {children}
+      </div>
     </div>
   )
 }

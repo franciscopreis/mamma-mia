@@ -68,28 +68,7 @@ const items: Pizza[] = [
 ]
 
 export default function Pizzas() {
-  const { dictionary, loading } = useDictionary()
-
-  if (loading) {
-    return (
-      <section
-        id="pizzas"
-        className="py-15 w-full bg-cover bg-center bg-amber-200/30"
-      >
-        <div className="max-w-6xl mx-auto px-4 text-center">
-          <div className="animate-pulse h-8 bg-gray-300 rounded mb-5"></div>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            {[...Array(6)].map((_, i) => (
-              <div
-                key={i}
-                className="animate-pulse bg-gray-300 h-48 rounded"
-              ></div>
-            ))}
-          </div>
-        </div>
-      </section>
-    )
-  }
+  const { dictionary } = useDictionary()
 
   if (!dictionary) {
     return (
@@ -126,7 +105,7 @@ export default function Pizzas() {
                   width={309}
                   height={232}
                   sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw"
-                  quality={75}
+                  quality={50}
                   className="object-cover rounded-xl w-full h-full"
                 />
               </div>
