@@ -17,12 +17,22 @@ export default function ScrollParallax({
 }: ScrollParallaxProps) {
   const ref = useRef<HTMLDivElement>(null)
   const [animate, setAnimate] = useState(false)
+  const timerRef = useRef<NodeJS.Timeout | null>(null)
 
   useEffect(() => {
+    const node = ref.current
+    if (!node) return
+
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
-          setTimeout(() => setAnimate(true), delay)
+        if (entry.isIntersecting && !animate) {
+          // garante que não crias múltiplos timeouts
+          if (!timerRef.current) {
+            timerRef.current = setTimeout(() => {
+              setAnimate(true)
+              timerRef.current = null
+            }, delay)
+          }
         }
       },
       {
@@ -31,14 +41,20 @@ export default function ScrollParallax({
       }
     )
 
-    if (ref.current) observer.observe(ref.current)
-    return () => observer.disconnect()
-  }, [delay])
+    observer.observe(node)
+    return () => {
+      observer.disconnect()
+      if (timerRef.current) clearTimeout(timerRef.current)
+    }
+  }, [delay, animate])
 
   return (
     <div
       ref={ref}
-      style={{ opacity: animate ? 1 : 0, transition: 'opacity 0.5s ease' }}
+      style={{
+        opacity: animate ? 1 : 0,
+        transition: 'opacity 0.5s ease',
+      }}
       className="will-change-transform relative"
     >
       <div

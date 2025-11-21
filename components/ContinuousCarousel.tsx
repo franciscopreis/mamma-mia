@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion'
 import Image from 'next/image'
+import { useEffect, useState } from 'react'
 
 export default function ContinuousCarousel() {
   const images = [
@@ -11,17 +12,26 @@ export default function ContinuousCarousel() {
     '/mamma-mia-vista.webp',
   ]
 
-  const looped = [...images, ...images] // efeito loop
+  const looped = [...images, ...images]
+
+  // Detect mobile to reduce animation
+  const [isMobile, setIsMobile] = useState(false)
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768)
+    handleResize()
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
 
   return (
     <div className="overflow-hidden relative w-full py-5">
       <motion.div
         className="flex will-change-transform"
-        animate={{ x: ['0%', '-50%'] }}
+        animate={{ x: ['0%', isMobile ? '-25%' : '-50%'] }}
         transition={{
           repeat: Infinity,
           repeatType: 'loop',
-          duration: 40,
+          duration: isMobile ? 20 : 40, // mais rápido no mobile
           ease: 'linear',
         }}
       >
@@ -37,7 +47,8 @@ export default function ContinuousCarousel() {
               sizes="(max-width: 768px) 50vw, (max-width: 1024px) 35vw, 25vw"
               className="object-cover"
               quality={75}
-              priority={i < 2}
+              loading={i === 0 ? 'eager' : 'lazy'}
+              priority={i === 0}
             />
           </div>
         ))}

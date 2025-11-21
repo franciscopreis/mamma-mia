@@ -6,6 +6,8 @@ import { useDictionary } from '@/hooks/useDictionary'
 import SkeletonBlock from './skeletons/SkeletonBlock'
 import SkeletonSection from './skeletons/SkeletonSection'
 
+import OpeningStatus from './OpeningStatus' // importa o componente
+
 export default function Contact() {
   const { dictionary } = useDictionary()
 
@@ -16,48 +18,20 @@ export default function Contact() {
     >
       {dictionary ? (
         <>
-          <div className="flex flex-col justify-center text-center md:text-left border-2 border-emerald-800 rounded-lg max-w-sm mx-auto py-6 w-full h-[650px]">
+          <div className="flex flex-col justify-center text-center md:text-left border-2 border-emerald-800 rounded-lg max-w-sm mx-auto py-6 w-full">
             <h2 className="text-3xl md:text-4xl tracking-wide italic font-serif text-red-800 leading-snug text-center">
               {dictionary.contact?.hours.title}
             </h2>
-            {/* Horários */}
+
+            {/* Horários normais */}
             <div className="mt-4 px-6 space-y-4 flex-1">
-              <div className="space-y-3">
-                <div className="text-center">
-                  <div className="text-base font-medium mb-3 px-4 py-2 text-emerald-800 bg-emerald-50 rounded-lg">
-                    {dictionary.contact?.hours.openDays}
-                  </div>
-                </div>
-                <div className="space-y-2 text-sm text-gray-700">
-                  <div className="flex justify-between items-center">
-                    <span className="font-medium text-emerald-700">
-                      {dictionary.contact?.hours.lunch}:
-                    </span>
-                    <span className="font-semibold">
-                      {dictionary.contact?.hours.lunchTime}
-                    </span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="font-medium text-emerald-700">
-                      {dictionary.contact?.hours.dinner}:
-                    </span>
-                    <span className="font-semibold">
-                      {dictionary.contact?.hours.dinnerTime}
-                    </span>
-                  </div>
-                </div>
+              {/* Aqui introduzimos o OpeningStatus */}
+              <div className="mt-6">
+                <OpeningStatus className="w-full" />
               </div>
-              <div className="pt-4 border-t border-gray-200">
-                <div className="flex justify-between items-center">
-                  <span className="text-red-700 font-medium">
-                    {dictionary.contact?.hours.closedDay}:
-                  </span>
-                  <span className="font-medium text-red-700 bg-red-50 px-3 py-1 rounded-lg">
-                    {dictionary.contact?.hours.closed}
-                  </span>
-                </div>
-              </div>
+
               <hr className="w-full border border-emerald-800 my-4" />
+
               <h2 className="text-3xl md:text-4xl tracking-wide italic font-serif text-red-800 leading-snug text-center">
                 {dictionary.contact?.info.title}
               </h2>

@@ -104,7 +104,7 @@ export default function Navbar() {
         {/* Right group */}
         <div className="flex items-center gap-2 md:gap-4">
           {/* Language Switcher */}
-          <LanguageSwitcher currentLang="pt" />
+          <LanguageSwitcher />
 
           {/* Telefone */}
           {dictionary && (

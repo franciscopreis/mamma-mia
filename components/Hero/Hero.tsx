@@ -4,204 +4,90 @@ import Image from 'next/image'
 import { useState, useEffect, useRef } from 'react'
 import { useDictionary } from '@/hooks/useDictionary'
 import SkeletonBlock from '../skeletons/SkeletonBlock'
+import Link from 'next/link'
 
-const carouselImages = [
+// ---------------- HERO ----------------
+const heroImages = [
   '/pizza-salame.webp',
   '/pizza-deseree.webp',
   '/pizza-prociuto-funghi.webp',
   '/pizza-hawai.webp',
 ]
 
-const logos = [
-  {
-    src: '/pizzeria-lettering.png',
-    width: 300,
-    height: 75,
-    alt: 'Pizzeria Mamma Mia',
-    className: '-mb-5 mt-5',
-  },
-  {
-    src: '/logo.png',
-    width: 200,
-    height: 200,
-    alt: 'Pizzeria Mamma Mia',
-    className: '-mt-5',
-    loading: 'eager',
-  },
-  {
-    src: '/mamma-mia-lettering.png',
-    width: 300,
-    height: 75,
-    alt: 'Pizzeria Mamma Mia',
-    className: '-mt-5',
-  },
+const heroLogos = [
+  { src: '/pizzeria-lettering.png', width: 300, height: 75, alt: 'Logo 1' },
+  { src: '/logo.png', width: 200, height: 200, alt: 'Logo 2' },
+  { src: '/mamma-mia-lettering.png', width: 300, height: 75, alt: 'Logo 3' },
 ]
 
-export default function Hero() {
+export function HeroMobile() {
   const { dictionary } = useDictionary()
   const [current, setCurrent] = useState(0)
-  const [isExpanded, setIsExpanded] = useState(false)
-  const [isOpen, setIsOpen] = useState(false)
-  const [nextOpening, setNextOpening] = useState('')
-  const accordionRef = useRef<HTMLButtonElement>(null)
 
   // Carousel automático
   useEffect(() => {
     const interval = setInterval(
-      () => setCurrent((prev) => (prev + 1) % carouselImages.length),
+      () => setCurrent((prev) => (prev + 1) % heroImages.length),
       3000
     )
     return () => clearInterval(interval)
   }, [])
 
-  // Status pizzaria
-  useEffect(() => {
-    if (!dictionary) return
-    const now = new Date()
-    const day = now.getDay()
-    const time = now.getHours() + now.getMinutes() / 60
-
-    const closedDay = 1
-    const lunchStart = 12
-    const lunchEnd = 14
-    const dinnerStart = 18
-    const dinnerEnd = 23
-
-    const isClosedDay = day === closedDay
-    const lunchTime = time >= lunchStart && time < lunchEnd
-    const dinnerTime = time >= dinnerStart && time < dinnerEnd
-    const open = !isClosedDay && (lunchTime || dinnerTime)
-
-    let nextTime = ''
-    if (isClosedDay)
-      nextTime = dictionary.openingStatus.nextOpening.tomorrowLunch
-    else if (!lunchTime && time < lunchStart)
-      nextTime = dictionary.openingStatus.nextOpening.todayLunch
-    else if (!dinnerTime && time < dinnerStart)
-      nextTime = dictionary.openingStatus.nextOpening.todayDinner
-    else nextTime = dictionary.openingStatus.nextOpening.tomorrowLunch
-
-    setIsOpen(open)
-    setNextOpening(nextTime)
-  }, [dictionary])
-
-  // Skeleton enquanto carrega
   if (!dictionary) {
     return (
-      <section className="relative w-full h-[70vh] flex flex-col justify-center items-center bg-gray-300 overflow-hidden pb-20">
-        <SkeletonBlock height={200} width={300} className="mb-4" /> {/* Logo */}
-        <SkeletonBlock height={20} width={200} className="mb-2" />{' '}
-        {/* Subtítulo */}
-        <SkeletonBlock
-          height={40}
-          width={150}
-          className="mb-2 rounded-xl"
-        />{' '}
-        {/* Botão */}
-        <SkeletonBlock height={30} width={100} className="rounded-lg" />{' '}
-        {/* Status */}
+      <section className="relative w-full h-[70vh] flex flex-col justify-center items-center bg-gray-300">
+        <SkeletonBlock height={200} width={300} className="mb-4" />
+        <SkeletonBlock height={20} width={200} className="mb-2" />
+        <SkeletonBlock height={40} width={150} className="mb-2 rounded-xl" />
+        <SkeletonBlock height={30} width={100} className="rounded-lg" />
       </section>
     )
   }
 
   return (
-    <section className="relative w-full flex justify-center overflow-visible bg-gray-300 pb-20">
-      {/* Carousel */}
-      {carouselImages.map((src, idx) => (
+    <section className="relative w-full h-[70vh] overflow-hidden bg-gray-300">
+      {/* Imagem de fundo */}
+      {heroImages.map((src, idx) => (
         <Image
           key={idx}
           src={src}
           alt={`Pizza ${idx + 1}`}
           fill
+          sizes="100vw"
+          className={`object-cover transition-opacity duration-1000 ${
+            idx === current ? 'opacity-60 z-10' : 'opacity-0 z-0'
+          }`}
           priority={idx === 0}
-          fetchPriority={idx === 0 ? 'high' : 'auto'}
-          quality={75}
-          sizes="(max-width: 768px) 100vw, 100vw"
-          className={`object-cover transition-opacity duration-1000 ${idx === current ? 'opacity-60 z-10' : 'opacity-0 z-0'}`}
+          loading={idx === 0 ? 'eager' : 'lazy'}
         />
       ))}
 
-      <div className="text-center px-4 max-w-3xl z-20 font-montserrat">
+      <div className="absolute inset-0 flex flex-col items-center justify-center z-20 px-4 text-center">
         {/* Logos */}
-        <div className="hover:scale-105 flex flex-col items-center py-5">
-          {logos.map((logo, i) => (
+        <div className="flex flex-col items-center py-5">
+          {heroLogos.map((logo, i) => (
             <Image
               key={i}
-              {...logo}
-              className={`${logo.className ?? ''} w-auto h-auto object-contain`}
-              alt={logo.alt ?? 'Logo'}
-              quality={75}
+              src={logo.src}
+              width={logo.width}
+              height={logo.height}
+              alt={logo.alt}
+              className="object-contain w-auto h-auto mb-2"
             />
           ))}
         </div>
 
-        <p className="tracking-widest text-xl font-light italic max-w-xl mt-4">
+        {/* Subtítulo */}
+        <p className="tracking-widest text-base font-light italic max-w-xs">
           {dictionary.hero.subtitle}
         </p>
 
-        <div className="flex flex-col justify-center gap-4 mt-4">
-          <button className="tracking-widest md:text-xl text-base font-light w-auto border rounded-xl mx-auto px-4 py-1 shadow-xl">
+        {/* Botão */}
+        <Link href="#pizzas">
+          <button className="tracking-widest text-base font-light w-auto border rounded-xl mt-4 px-4 py-1 shadow-xl">
             {dictionary.hero.menuButton}
           </button>
-
-          <div className="flex flex-col items-center">
-            <div
-              className={`text-base font-medium mb-1 border rounded-lg px-3 py-1 text-stone-800 ${isOpen ? 'bg-emerald-500/50' : 'bg-red-500/50'}`}
-            >
-              {isOpen
-                ? dictionary.openingStatus.status.open
-                : dictionary.openingStatus.status.closed}
-            </div>
-
-            <button
-              type="button"
-              onClick={() => setIsExpanded(!isExpanded)}
-              className="mt-4 text-xs font-light tracking-wide transition-all duration-300 border border-gray-300 rounded-lg px-3 py-1 backdrop-blur-sm bg-white/50 text-gray-600 hover:bg-white/70 hover:scale-105 active:scale-95 cursor-pointer"
-              aria-expanded={isExpanded}
-              aria-label={
-                isExpanded
-                  ? dictionary.openingStatus.ariaLabels.close
-                  : dictionary.openingStatus.ariaLabels.open
-              }
-              ref={accordionRef}
-            >
-              {isExpanded
-                ? dictionary.openingStatus.buttons.close
-                : dictionary.openingStatus.buttons.viewHours}
-            </button>
-
-            {isExpanded && (
-              <div className="overflow-hidden transition-all duration-300 ease-in-out w-full opacity-70 mt-4">
-                <div className="bg-white/50 rounded-xl p-4 shadow-lg border border-gray-200">
-                  <div className="space-y-3 text-sm text-gray-700">
-                    <div className="text-center font-semibold text-gray-800 mb-2">
-                      {dictionary.openingStatus.hours.title}
-                    </div>
-
-                    {/* Lista de horários */}
-                    {dictionary.openingStatus.hours.items.map((item, idx) => (
-                      <div key={idx} className="flex justify-between">
-                        <span className="font-medium">{item.day}</span>
-                        <span>
-                          {item.open} - {item.close}
-                        </span>
-                      </div>
-                    ))}
-
-                    {!isOpen && (
-                      <div className="pt-3 border-t border-gray-200 text-center text-xs text-gray-600">
-                        {dictionary.openingStatus.nextOpening.weOpen}{' '}
-                        <span className="font-semibold text-emerald-700">
-                          {nextOpening}
-                        </span>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
+        </Link>
       </div>
     </section>
   )

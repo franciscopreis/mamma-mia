@@ -12,7 +12,6 @@ import ScrollParallax from './ScrollParallax'
 import { useDictionary } from '@/hooks/useDictionary'
 import SkeletonSection from './skeletons/SkeletonSection'
 
-// ---------------- HARD-CODED REVIEWS ----------------
 const reviews = [
   {
     text: 'Recomendo todo o serviço, desde o atendimento rápido até à simpatia da equipa, passando pela qualidade das pizzas.',
@@ -46,7 +45,6 @@ const reviews = [
   },
 ]
 
-// ---------------- PLATFORM ICONS ----------------
 const platformIcons: Record<string, ReactElement> = {
   'Trip Advisor': (
     <Tripadvisor className="inline-block text-green-600 ml-2 bottom-0.5" />
@@ -60,84 +58,55 @@ const platformIcons: Record<string, ReactElement> = {
 export default function Testimonials() {
   const { dictionary } = useDictionary()
   const [index, setIndex] = useState(0)
-  const [isVisible, setIsVisible] = useState(true)
   const [isDragging, setIsDragging] = useState(false)
   const [startX, setStartX] = useState(0)
   const [currentX, setCurrentX] = useState(0)
+  const [ready, setReady] = useState(false)
   const touchAreaRef = useRef<HTMLDivElement>(null)
 
-  // ---------------- NAVIGATION ----------------
-  const next = useCallback(() => {
-    setIsVisible(false)
-    setTimeout(() => {
-      setIndex((i) => (i + 1) % reviews.length)
-      setIsVisible(true)
-    }, 300)
-  }, [])
+  useEffect(() => {
+    if (dictionary) setReady(true)
+  }, [dictionary])
 
-  const prev = useCallback(() => {
-    setIsVisible(false)
-    setTimeout(() => {
-      setIndex((i) => (i - 1 + reviews.length) % reviews.length)
-      setIsVisible(true)
-    }, 300)
-  }, [])
+  // Navigation
+  const next = useCallback(() => setIndex((i) => (i + 1) % reviews.length), [])
+  const prev = useCallback(
+    () => setIndex((i) => (i - 1 + reviews.length) % reviews.length),
+    []
+  )
+  const goToReview = useCallback((i: number) => setIndex(i), [])
 
-  const goToReview = useCallback((i: number) => {
-    setIsVisible(false)
-    setTimeout(() => {
-      setIndex(i)
-      setIsVisible(true)
-    }, 300)
-  }, [])
-
-  // ---------------- DRAG / SWIPE ----------------
-  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+  // Drag / swipe
+  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
     setIsDragging(true)
     setStartX(e.touches[0].clientX)
     setCurrentX(e.touches[0].clientX)
-  }, [])
-
-  const handleTouchMove = useCallback(
-    (e: React.TouchEvent) => {
-      if (!isDragging) return
-      setCurrentX(e.touches[0].clientX)
-    },
-    [isDragging]
-  )
-
-  const handleTouchEnd = useCallback(() => {
+  }
+  const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) =>
+    isDragging && setCurrentX(e.touches[0].clientX)
+  const handleTouchEnd = () => {
     if (!isDragging) return
     const diff = startX - currentX
-    if (Math.abs(diff) > 50) (diff > 0 ? next : prev)()
+    if (Math.abs(diff) > 50) diff > 0 ? next() : prev()
     setIsDragging(false)
     setStartX(0)
     setCurrentX(0)
-  }, [isDragging, startX, currentX, next, prev])
-
-  const handleMouseDown = useCallback((e: React.MouseEvent) => {
+  }
+  const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     setIsDragging(true)
     setStartX(e.clientX)
     setCurrentX(e.clientX)
-  }, [])
-
-  const handleMouseMove = useCallback(
-    (e: React.MouseEvent) => {
-      if (!isDragging) return
-      setCurrentX(e.clientX)
-    },
-    [isDragging]
-  )
-
-  const handleMouseUp = useCallback(() => {
+  }
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) =>
+    isDragging && setCurrentX(e.clientX)
+  const handleMouseUp = () => {
     if (!isDragging) return
     const diff = startX - currentX
-    if (Math.abs(diff) > 50) (diff > 0 ? next : prev)()
+    if (Math.abs(diff) > 50) diff > 0 ? next() : prev()
     setIsDragging(false)
     setStartX(0)
     setCurrentX(0)
-  }, [isDragging, startX, currentX, next, prev])
-
+  }
   const getDragTransform = () => {
     if (!isDragging) return ''
     const diff = startX - currentX
@@ -145,15 +114,16 @@ export default function Testimonials() {
     return `translateX(${boundedDiff * 0.5}px)`
   }
 
-  // ---------------- AUTO ADVANCE ----------------
+  // Auto advance
   useEffect(() => {
+    if (!ready) return
     const timer = setInterval(next, 5000)
     return () => clearInterval(timer)
-  }, [next])
+  }, [next, ready])
 
   if (!dictionary) return <SkeletonSection type="testimonials" />
 
-  // ---------------- RENDER ----------------
+  // Render
   return (
     <section className="relative py-15 w-full bg-emerald-100" id="testimonials">
       <ScrollParallax startY={30} delay={100}>
@@ -173,7 +143,7 @@ export default function Testimonials() {
 
         <div
           ref={touchAreaRef}
-          className="h-40 flex items-center justify-center text-sm max-w-xs lg:max-w-xl mx-auto touch-pan-y select-none"
+          className="h-48 md:h-48 flex items-center justify-center text-sm max-w-xs lg:max-w-xl mx-auto touch-pan-y select-none"
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
@@ -184,12 +154,10 @@ export default function Testimonials() {
           style={{ cursor: isDragging ? 'grabbing' : 'grab' }}
         >
           <div
-            className={`transition-all duration-300 ${
-              isVisible ? 'opacity-100' : 'opacity-0'
-            }`}
+            className="transition-opacity duration-300 opacity-100"
             style={{
               transform: isDragging ? getDragTransform() : 'translateX(0)',
-              transition: isDragging ? 'none' : 'all 0.3s ease',
+              willChange: 'transform, opacity',
             }}
           >
             <p className="italic md:max-w-xl text-center lg:text-base text-sm">
@@ -227,39 +195,6 @@ export default function Testimonials() {
             />
           ))}
         </div>
-      </div>
-
-      {/* Ratings */}
-      <div className="flex flex-wrap justify-center gap-6 mt-10 mb-5 text-emerald-600 font-semibold">
-        <a
-          href="https://www.facebook.com/mammamia.sta.cruz"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center gap-2 border px-4 py-2 rounded-xl transition text-red-800"
-        >
-          <span>{dictionary.testimonials?.ratings.facebook}</span>
-          <Facebook className="text-blue-500 text-xl" />
-        </a>
-
-        <a
-          href="https://www.google.com/maps/place/Pizzeria+Mamma+Mia/@39.1337248,-9.3868453,17z/data=!4m6!3m5!1s0xd1f31bebc2b8daf:0x8d7fd173ee42c87e!8m2!3d39.1337207!4d-9.3819744!16s%2Fg%2F11c0w0hxrr?entry=ttu&g_ep=EgoyMDI5MTExMi4wIKXMDSoASAFQAw%3D%3D"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center gap-2 px-4 py-2 rounded-xl border transition text-red-800"
-        >
-          <span>{dictionary.testimonials?.ratings.google}</span>
-          <GoogleMaps className="text-red-500 text-xl" />
-        </a>
-
-        <a
-          href="https://www.tripadvisor.com/Restaurant_Review-g656858-d4783857-Reviews-Pizzeria_Mamma_Mia-Torres_Vedras_Lisbon_District_Central_Portugal.html"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center gap-2 px-4 py-2 rounded-xl border transition text-red-800"
-        >
-          <span>{dictionary.testimonials?.ratings.tripadvisor}</span>
-          <Tripadvisor className="text-green-500 text-xl" />
-        </a>
       </div>
     </section>
   )
