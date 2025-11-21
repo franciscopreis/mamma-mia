@@ -1,10 +1,10 @@
-// src/components/Pizzas.tsx
 'use client'
 
 import Image from 'next/image'
 import ScrollParallax from './ScrollParallax'
 import { useDictionary } from '@/hooks/useDictionary'
 import { getNestedValue } from '@/utils/objectHelpers'
+import SkeletonSection from './skeletons/SkeletonSection'
 
 export type Pizza = {
   number: number | string
@@ -15,7 +15,6 @@ export type Pizza = {
   category: string
 }
 
-// ✅ Dados das pizzas
 const items: Pizza[] = [
   {
     number: '0A',
@@ -70,18 +69,7 @@ const items: Pizza[] = [
 export default function Pizzas() {
   const { dictionary } = useDictionary()
 
-  if (!dictionary) {
-    return (
-      <section
-        id="pizzas"
-        className="py-15 w-full bg-cover bg-center bg-amber-200/30"
-      >
-        <div className="max-w-6xl mx-auto px-4 text-center">
-          <p>Erro ao carregar menu</p>
-        </div>
-      </section>
-    )
-  }
+  if (!dictionary) return <SkeletonSection type="pizzas" />
 
   return (
     <section
@@ -95,7 +83,7 @@ export default function Pizzas() {
           </h2>
         </ScrollParallax>
 
-        <div className="grid grid-cols-2 md:grid-cols-3">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
           {items.map((p) => (
             <div key={p.nameKey} className="flex flex-col items-center p-3">
               <div className="relative mb-4 lg:px-5 lg:pt-5 w-full aspect-4/3">
@@ -105,7 +93,7 @@ export default function Pizzas() {
                   width={309}
                   height={232}
                   sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw"
-                  quality={50}
+                  quality={75}
                   className="object-cover rounded-xl w-full h-full"
                 />
               </div>

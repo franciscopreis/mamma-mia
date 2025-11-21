@@ -10,6 +10,7 @@ import {
 } from '@/components/ui/Icons'
 import ScrollParallax from './ScrollParallax'
 import { useDictionary } from '@/hooks/useDictionary'
+import SkeletonSection from './skeletons/SkeletonSection'
 
 // ---------------- HARD-CODED REVIEWS ----------------
 const reviews = [
@@ -150,18 +151,7 @@ export default function Testimonials() {
     return () => clearInterval(timer)
   }, [next])
 
-  if (!dictionary) {
-    return (
-      <section
-        className="relative py-15 w-full bg-emerald-100"
-        id="testimonials"
-      >
-        <div className="max-w-3xl mx-auto px-4 text-center">
-          <p>Erro ao carregar avaliações</p>
-        </div>
-      </section>
-    )
-  }
+  if (!dictionary) return <SkeletonSection type="testimonials" />
 
   // ---------------- RENDER ----------------
   return (

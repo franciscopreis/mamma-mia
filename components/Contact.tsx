@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { WhatsApp } from './ui/Icons'
 import { useDictionary } from '@/hooks/useDictionary'
 import SkeletonBlock from './skeletons/SkeletonBlock'
+import SkeletonSection from './skeletons/SkeletonSection'
 
 export default function Contact() {
   const { dictionary } = useDictionary()
@@ -88,7 +89,7 @@ export default function Contact() {
             </div>
           </div>
 
-          <div className="relative w-full h-[600px] rounded-2xl overflow-hidden shadow-lg max-w-sm mx-auto">
+          <div className="relative w-full h-[700px] rounded-2xl overflow-hidden shadow-lg max-w-sm mx-auto">
             <iframe
               aria-label={dictionary.contact?.ariaLabels.mapLocation}
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3094.802528970234!2d-9.384554687909617!3d39.13372483260613!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd1f31bebc2b8daf%3A0x8d7fd173ee42c87e!2sPizzeria%20Mamma%20Mia!5e0!3m2!1sen!2spt!4v1763218420562!5m2!1sen!2spt"
@@ -102,10 +103,7 @@ export default function Contact() {
           </div>
         </>
       ) : (
-        <>
-          <SkeletonBlock height={650} />
-          <SkeletonBlock height={600} />
-        </>
+        <SkeletonSection type="contact" />
       )}
     </section>
   )

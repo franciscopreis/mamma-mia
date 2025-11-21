@@ -1,19 +1,14 @@
 'use client'
 
-import ContinuousCarousel from './ContinuousCarousel'
 import ScrollParallax from './ScrollParallax'
+import ContinuousCarousel from './ContinuousCarousel'
 import { useDictionary } from '@/hooks/useDictionary'
+import SkeletonSection from './skeletons/SkeletonSection'
 
 export default function Restaurant() {
   const { dictionary } = useDictionary()
-  if (!dictionary)
-    return (
-      <section className="py-15 px-5 md:px-10" id="restaurant">
-        <div className="max-w-4xl mx-auto text-center">
-          <p>Erro ao carregar conteúdo</p>
-        </div>
-      </section>
-    )
+
+  if (!dictionary) return <SkeletonSection type="restaurant" />
 
   const { restaurant } = dictionary
 

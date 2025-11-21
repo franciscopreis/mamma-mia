@@ -36,7 +36,7 @@ export default function ContinuousCarousel() {
               fill
               sizes="(max-width: 768px) 50vw, (max-width: 1024px) 35vw, 25vw"
               className="object-cover"
-              quality={70}
+              quality={75}
               priority={i < 2}
             />
           </div>

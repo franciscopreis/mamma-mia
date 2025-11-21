@@ -1,7 +1,6 @@
 'use client'
 
 import Image from 'next/image'
-import Link from 'next/link'
 import { useState, useEffect, useRef } from 'react'
 import { useDictionary } from '@/hooks/useDictionary'
 import SkeletonBlock from '../skeletons/SkeletonBlock'
@@ -27,6 +26,7 @@ const logos = [
     height: 200,
     alt: 'Pizzeria Mamma Mia',
     className: '-mt-5',
+    loading: 'eager',
   },
   {
     src: '/mamma-mia-lettering.png',
@@ -39,15 +39,13 @@ const logos = [
 
 export default function Hero() {
   const { dictionary } = useDictionary()
-
-  // 🔹 hooks sempre executados na mesma ordem
   const [current, setCurrent] = useState(0)
   const [isExpanded, setIsExpanded] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
   const [nextOpening, setNextOpening] = useState('')
   const accordionRef = useRef<HTMLButtonElement>(null)
 
-  // 🔹 Carousel automático
+  // Carousel automático
   useEffect(() => {
     const interval = setInterval(
       () => setCurrent((prev) => (prev + 1) % carouselImages.length),
@@ -56,15 +54,14 @@ export default function Hero() {
     return () => clearInterval(interval)
   }, [])
 
-  // 🔹 Calcula status da pizzaria
+  // Status pizzaria
   useEffect(() => {
     if (!dictionary) return
-
     const now = new Date()
     const day = now.getDay()
     const time = now.getHours() + now.getMinutes() / 60
 
-    const closedDay = 1 // Segunda
+    const closedDay = 1
     const lunchStart = 12
     const lunchEnd = 14
     const dinnerStart = 18
@@ -88,108 +85,124 @@ export default function Hero() {
     setNextOpening(nextTime)
   }, [dictionary])
 
-  // 🔹 Mantém a mesma árvore de JSX sempre
+  // Skeleton enquanto carrega
+  if (!dictionary) {
+    return (
+      <section className="relative w-full h-[70vh] flex flex-col justify-center items-center bg-gray-300 overflow-hidden pb-20">
+        <SkeletonBlock height={200} width={300} className="mb-4" /> {/* Logo */}
+        <SkeletonBlock height={20} width={200} className="mb-2" />{' '}
+        {/* Subtítulo */}
+        <SkeletonBlock
+          height={40}
+          width={150}
+          className="mb-2 rounded-xl"
+        />{' '}
+        {/* Botão */}
+        <SkeletonBlock height={30} width={100} className="rounded-lg" />{' '}
+        {/* Status */}
+      </section>
+    )
+  }
+
   return (
     <section className="relative w-full flex justify-center overflow-visible bg-gray-300 pb-20">
-      {dictionary ? (
-        <>
-          {/* Carousel */}
-          {carouselImages.map((src, idx) => (
+      {/* Carousel */}
+      {carouselImages.map((src, idx) => (
+        <Image
+          key={idx}
+          src={src}
+          alt={`Pizza ${idx + 1}`}
+          fill
+          priority={idx === 0}
+          fetchPriority={idx === 0 ? 'high' : 'auto'}
+          quality={75}
+          sizes="(max-width: 768px) 100vw, 100vw"
+          className={`object-cover transition-opacity duration-1000 ${idx === current ? 'opacity-60 z-10' : 'opacity-0 z-0'}`}
+        />
+      ))}
+
+      <div className="text-center px-4 max-w-3xl z-20 font-montserrat">
+        {/* Logos */}
+        <div className="hover:scale-105 flex flex-col items-center py-5">
+          {logos.map((logo, i) => (
             <Image
-              key={idx}
-              src={src}
-              alt={`Pizza ${idx + 1}`}
-              fill
-              priority={idx === 0}
-              fetchPriority={idx === 0 ? 'high' : 'auto'}
-              quality={idx === 0 ? 80 : 70}
-              sizes="100vw"
-              className={`object-cover transition-opacity duration-1000 ${idx === current ? 'opacity-60 z-10' : 'opacity-0 z-0'}`}
+              key={i}
+              {...logo}
+              className={`${logo.className ?? ''} w-auto h-auto object-contain`}
+              alt={logo.alt ?? 'Logo'}
+              quality={75}
             />
           ))}
+        </div>
 
-          <div className="text-center px-4 max-w-3xl z-20 font-montserrat">
-            {/* Logos */}
-            <div className="hover:scale-105 flex flex-col items-center py-5">
-              {logos.map((logo, i) => (
-                <Image
-                  key={i}
-                  {...logo}
-                  className={logo.className ?? 'object-contain'}
-                  alt={logo.alt ?? 'Logo'}
-                />
-              ))}
+        <p className="tracking-widest text-xl font-light italic max-w-xl mt-4">
+          {dictionary.hero.subtitle}
+        </p>
+
+        <div className="flex flex-col justify-center gap-4 mt-4">
+          <button className="tracking-widest md:text-xl text-base font-light w-auto border rounded-xl mx-auto px-4 py-1 shadow-xl">
+            {dictionary.hero.menuButton}
+          </button>
+
+          <div className="flex flex-col items-center">
+            <div
+              className={`text-base font-medium mb-1 border rounded-lg px-3 py-1 text-stone-800 ${isOpen ? 'bg-emerald-500/50' : 'bg-red-500/50'}`}
+            >
+              {isOpen
+                ? dictionary.openingStatus.status.open
+                : dictionary.openingStatus.status.closed}
             </div>
 
-            <p className="tracking-widest text-xl font-light italic max-w-xl mt-4">
-              {dictionary.hero.subtitle}
-            </p>
+            <button
+              type="button"
+              onClick={() => setIsExpanded(!isExpanded)}
+              className="mt-4 text-xs font-light tracking-wide transition-all duration-300 border border-gray-300 rounded-lg px-3 py-1 backdrop-blur-sm bg-white/50 text-gray-600 hover:bg-white/70 hover:scale-105 active:scale-95 cursor-pointer"
+              aria-expanded={isExpanded}
+              aria-label={
+                isExpanded
+                  ? dictionary.openingStatus.ariaLabels.close
+                  : dictionary.openingStatus.ariaLabels.open
+              }
+              ref={accordionRef}
+            >
+              {isExpanded
+                ? dictionary.openingStatus.buttons.close
+                : dictionary.openingStatus.buttons.viewHours}
+            </button>
 
-            <div className="flex flex-col justify-center gap-4 mt-4">
-              <Link
-                href="#pizzas"
-                className="tracking-widest md:text-xl text-base font-light w-auto border rounded-xl mx-auto hover:scale-105 px-4 py-1 shadow-xl"
-              >
-                {dictionary.hero.menuButton}
-              </Link>
-
-              <div className="flex flex-col items-center">
-                <div
-                  className={`text-base font-medium mb-1 border rounded-lg px-3 py-1 text-stone-800 ${
-                    isOpen ? 'bg-emerald-500/50' : 'bg-red-500/50'
-                  }`}
-                >
-                  {isOpen
-                    ? dictionary.openingStatus.status.open
-                    : dictionary.openingStatus.status.closed}
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() => setIsExpanded(!isExpanded)}
-                  className="mt-4 text-xs font-light tracking-wide transition-all duration-300 border border-gray-300 rounded-lg px-3 py-1 backdrop-blur-sm bg-white/50 text-gray-600 hover:bg-white/70 hover:scale-105 active:scale-95 cursor-pointer"
-                  aria-expanded={isExpanded}
-                  aria-label={
-                    isExpanded
-                      ? dictionary.openingStatus.ariaLabels.close
-                      : dictionary.openingStatus.ariaLabels.open
-                  }
-                  ref={accordionRef}
-                >
-                  {isExpanded
-                    ? dictionary.openingStatus.buttons.close
-                    : dictionary.openingStatus.buttons.viewHours}
-                </button>
-
-                {isExpanded && (
-                  <div className="overflow-hidden transition-all duration-300 ease-in-out w-full opacity-70 mt-4">
-                    <div className="bg-white/50 rounded-xl p-4 shadow-lg border border-gray-200">
-                      {/* Horários */}
-                      <div className="space-y-3 text-sm text-gray-700">
-                        <div className="text-center font-semibold text-gray-800 mb-2">
-                          {dictionary.openingStatus.hours.title}
-                        </div>
-                        {/* ... restante do conteúdo */}
-                        {!isOpen && (
-                          <div className="pt-3 border-t border-gray-200 text-center text-xs text-gray-600">
-                            {dictionary.openingStatus.nextOpening.weOpen}{' '}
-                            <span className="font-semibold text-emerald-700">
-                              {nextOpening}
-                            </span>
-                          </div>
-                        )}
-                      </div>
+            {isExpanded && (
+              <div className="overflow-hidden transition-all duration-300 ease-in-out w-full opacity-70 mt-4">
+                <div className="bg-white/50 rounded-xl p-4 shadow-lg border border-gray-200">
+                  <div className="space-y-3 text-sm text-gray-700">
+                    <div className="text-center font-semibold text-gray-800 mb-2">
+                      {dictionary.openingStatus.hours.title}
                     </div>
+
+                    {/* Lista de horários */}
+                    {dictionary.openingStatus.hours.items.map((item, idx) => (
+                      <div key={idx} className="flex justify-between">
+                        <span className="font-medium">{item.day}</span>
+                        <span>
+                          {item.open} - {item.close}
+                        </span>
+                      </div>
+                    ))}
+
+                    {!isOpen && (
+                      <div className="pt-3 border-t border-gray-200 text-center text-xs text-gray-600">
+                        {dictionary.openingStatus.nextOpening.weOpen}{' '}
+                        <span className="font-semibold text-emerald-700">
+                          {nextOpening}
+                        </span>
+                      </div>
+                    )}
                   </div>
-                )}
+                </div>
               </div>
-            </div>
+            )}
           </div>
-        </>
-      ) : (
-        // Skeleton enquanto carrega
-        <SkeletonBlock height={650} className="w-full rounded-lg" />
-      )}
+        </div>
+      </div>
     </section>
   )
 }

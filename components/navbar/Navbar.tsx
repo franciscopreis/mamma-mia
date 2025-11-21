@@ -103,34 +103,22 @@ export default function Navbar() {
 
         {/* Right group */}
         <div className="flex items-center gap-2 md:gap-4">
+          {/* Language Switcher */}
           <LanguageSwitcher currentLang="pt" />
-          {dictionary ? (
-            <>
-              {/* Phone desktop */}
-              <Link
-                href={`tel:${phoneNumber}`}
-                aria-label={dictionary.navigation.ariaLabels.callPhone}
-                className="hidden md:flex items-center flex-shrink-0 text-emerald-700 hover:text-red-700 transition-colors hover:scale-105"
-              >
-                <Phone className="text-xl sm:text-2xl" />
-                <span className="ml-2 text-sm">{phoneNumber}</span>
-              </Link>
 
-              {/* Phone mobile */}
-              <Link
-                href={`tel:${phoneNumber}`}
-                aria-label={dictionary.navigation.ariaLabels.callPhone}
-                className="md:hidden flex-shrink-0 text-emerald-700 hover:text-red-700 transition-colors hover:scale-105"
-              >
-                <Phone className="text-xl sm:text-2xl" />
-              </Link>
-            </>
-          ) : (
-            <SkeletonBlock
-              height={24}
-              width={80}
-              className="md:hidden rounded-lg"
-            />
+          {/* Telefone */}
+          {dictionary && (
+            <Link
+              href={`tel:${phoneNumber}`}
+              aria-label={dictionary.navigation.ariaLabels.callPhone}
+              className="flex items-center text-emerald-700 hover:text-red-700 transition-colors hover:scale-105"
+            >
+              <Phone className="text-xl sm:text-2xl" />
+              {/* Número visível apenas em md+ */}
+              <span className="ml-2 text-sm hidden md:inline">
+                {phoneNumber}
+              </span>
+            </Link>
           )}
 
           {/* Mobile hamburger */}

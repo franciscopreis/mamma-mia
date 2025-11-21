@@ -1,23 +1,20 @@
 'use client'
 
 import { useDictionary } from '@/hooks/useDictionary'
-import SkeletonBlock from './skeletons/SkeletonBlock'
+import SkeletonSection from './skeletons/SkeletonSection'
 
 export default function Footer() {
   const { dictionary } = useDictionary()
+  if (!dictionary) return <SkeletonSection type="footer" />
 
   return (
     <footer className="py-10 text-center">
-      {dictionary ? (
-        <p>
-          {dictionary.footer?.copyright.replace(
-            '{year}',
-            new Date().getFullYear().toString()
-          )}
-        </p>
-      ) : (
-        <SkeletonBlock height={20} width={120} className="mx-auto rounded-lg" />
-      )}
+      <p>
+        {dictionary.footer?.copyright.replace(
+          '{year}',
+          new Date().getFullYear().toString()
+        )}
+      </p>
     </footer>
   )
 }
