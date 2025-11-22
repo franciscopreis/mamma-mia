@@ -8,7 +8,7 @@ import Logo from './Logo'
 import LanguageSwitcher from '../LanguageSwitcher'
 import SkeletonBlock from '../skeletons/SkeletonBlock'
 
-const phoneNumber = '+351261937695'
+const phoneNumber = '+351 261 937 695'
 
 export default function Navbar() {
   const { dictionary } = useDictionary()

@@ -8,32 +8,48 @@ import SkeletonSection from './skeletons/SkeletonSection'
 export default function Restaurant() {
   const { dictionary } = useDictionary()
 
-  if (!dictionary) return <SkeletonSection type="restaurant" />
+  // ✅ Usar SkeletonSection diretamente
+  if (!dictionary) {
+    return <SkeletonSection type="restaurant" />
+  }
 
   const { restaurant } = dictionary
 
   return (
-    <section className="py-10 px-5 md:px-10" id="restaurant">
-      <ScrollParallax startY={30} delay={100}>
-        <h2 className="text-center text-3xl md:text-4xl tracking-wide italic font-serif text-red-800 leading-snug max-w-4xl mx-auto py-10">
-          {restaurant.mainTitle}
-        </h2>
-      </ScrollParallax>
+    <section id="restaurant" className="py-16 px-5 md:px-10">
+      <div className="max-w-4xl mx-auto">
+        {/* ✅ Título */}
+        <div className="mb-12">
+          <ScrollParallax startY={30} delay={100}>
+            <h2 className="text-center text-3xl md:text-4xl tracking-wide italic font-serif text-red-800 leading-snug mb-6">
+              {restaurant.mainTitle}
+            </h2>
+          </ScrollParallax>
+        </div>
 
-      <div className="mt-5 min-h-[160px] md:min-h-[180px]">
-        <ContinuousCarousel />
-      </div>
+        {/* ✅ Carousel */}
+        <div className="mb-16">
+          <ContinuousCarousel />
+        </div>
 
-      <div className="flex flex-col max-w-3xl mx-auto py-2 text-lg gap-3 text-justify">
-        <p className="text-lg tracking-widest leading-loose font-semibold text-emerald-800">
-          {restaurant.catchphrase}
-        </p>
-        <p className="text-lg tracking-wide leading-relaxed">
-          {restaurant.description1}
-        </p>
-        <p className="text-lg tracking-wide leading-relaxed">
-          {restaurant.description2}
-        </p>
+        {/* ✅ Texto */}
+        <div className="space-y-8 max-w-3xl mx-auto">
+          <div>
+            <p className="text-lg md:text-xl tracking-widest leading-loose font-semibold text-emerald-800 mb-4">
+              {restaurant.catchphrase}
+            </p>
+          </div>
+          <div>
+            <p className="text-lg leading-relaxed text-gray-700 mb-4">
+              {restaurant.description1}
+            </p>
+          </div>
+          <div>
+            <p className="text-lg leading-relaxed text-gray-700">
+              {restaurant.description2}
+            </p>
+          </div>
+        </div>
       </div>
     </section>
   )

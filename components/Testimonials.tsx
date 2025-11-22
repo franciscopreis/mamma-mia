@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback, useRef, ReactElement } from 'react'
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react'
 import {
   ChevronLeft,
   ChevronRight,
@@ -10,9 +10,9 @@ import {
 } from '@/components/ui/Icons'
 import ScrollParallax from './ScrollParallax'
 import { useDictionary } from '@/hooks/useDictionary'
-import SkeletonSection from './skeletons/SkeletonSection'
+import SkeletonBlock from './skeletons/SkeletonBlock'
 
-const reviews = [
+const REVIEWS = [
   {
     text: 'Recomendo todo o serviço, desde o atendimento rápido até à simpatia da equipa, passando pela qualidade das pizzas.',
     author: '— Ariana Sofia',
@@ -45,157 +45,148 @@ const reviews = [
   },
 ]
 
-const platformIcons: Record<string, ReactElement> = {
-  'Trip Advisor': (
-    <Tripadvisor className="inline-block text-green-600 ml-2 bottom-0.5" />
-  ),
-  Facebook: <Facebook className="inline-block text-blue-600 ml-2 bottom-0.5" />,
-  'Google Maps': (
-    <GoogleMaps className="inline-block text-red-600 ml-2 bottom-0.5" />
-  ),
-}
-
 export default function Testimonials() {
   const { dictionary } = useDictionary()
   const [index, setIndex] = useState(0)
-  const [isDragging, setIsDragging] = useState(false)
-  const [startX, setStartX] = useState(0)
-  const [currentX, setCurrentX] = useState(0)
-  const [ready, setReady] = useState(false)
-  const touchAreaRef = useRef<HTMLDivElement>(null)
 
-  useEffect(() => {
-    if (dictionary) setReady(true)
-  }, [dictionary])
-
-  // Navigation
-  const next = useCallback(() => setIndex((i) => (i + 1) % reviews.length), [])
-  const prev = useCallback(
-    () => setIndex((i) => (i - 1 + reviews.length) % reviews.length),
+  const { next, prev } = useMemo(
+    () => ({
+      next: () => setIndex((i) => (i + 1) % REVIEWS.length),
+      prev: () => setIndex((i) => (i - 1 + REVIEWS.length) % REVIEWS.length),
+    }),
     []
   )
-  const goToReview = useCallback((i: number) => setIndex(i), [])
 
-  // Drag / swipe
-  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
-    setIsDragging(true)
-    setStartX(e.touches[0].clientX)
-    setCurrentX(e.touches[0].clientX)
-  }
-  const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) =>
-    isDragging && setCurrentX(e.touches[0].clientX)
-  const handleTouchEnd = () => {
-    if (!isDragging) return
-    const diff = startX - currentX
-    if (Math.abs(diff) > 50) diff > 0 ? next() : prev()
-    setIsDragging(false)
-    setStartX(0)
-    setCurrentX(0)
-  }
-  const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
-    setIsDragging(true)
-    setStartX(e.clientX)
-    setCurrentX(e.clientX)
-  }
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) =>
-    isDragging && setCurrentX(e.clientX)
-  const handleMouseUp = () => {
-    if (!isDragging) return
-    const diff = startX - currentX
-    if (Math.abs(diff) > 50) diff > 0 ? next() : prev()
-    setIsDragging(false)
-    setStartX(0)
-    setCurrentX(0)
-  }
-  const getDragTransform = () => {
-    if (!isDragging) return ''
-    const diff = startX - currentX
-    const boundedDiff = Math.max(Math.min(diff, 100), -100)
-    return `translateX(${boundedDiff * 0.5}px)`
-  }
-
-  // Auto advance
   useEffect(() => {
-    if (!ready) return
+    if (!dictionary) return
     const timer = setInterval(next, 5000)
     return () => clearInterval(timer)
-  }, [next, ready])
+  }, [next, dictionary])
 
-  if (!dictionary) return <SkeletonSection type="testimonials" />
+  if (!dictionary) {
+    return (
+      <section
+        className="relative py-1 w-full bg-emerald-100 min-h-[400px]"
+        id="testimonials"
+      >
+        {/* ✅ Skeleton CORRETO para título */}
+        <div className="h-[100px] flex items-center justify-center mb-8">
+          <SkeletonBlock height={40} width={350} className="rounded mx-auto" />
+        </div>
 
-  // Render
+        {/* ✅ Skeleton CORRETO para conteúdo */}
+        <div className="min-h-[200px] flex items-center justify-center">
+          <div className="max-w-xl mx-auto text-center w-full">
+            <SkeletonBlock height={80} className="rounded-lg mb-4 w-full" />
+            <SkeletonBlock
+              height={24}
+              width={200}
+              className="rounded mx-auto"
+            />
+          </div>
+        </div>
+
+        {/* ✅ Skeleton CORRETO para bolinhas */}
+        <div className="h-[50px] flex items-center justify-center">
+          <div className="flex gap-3">
+            {REVIEWS.map((_, i) => (
+              <SkeletonBlock
+                key={i}
+                height={12}
+                width={12}
+                className="rounded-full"
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  const currentReview = REVIEWS[index]
+
   return (
-    <section className="relative py-15 w-full bg-emerald-100" id="testimonials">
-      <ScrollParallax startY={30} delay={100}>
-        <h2 className="text-center text-3xl md:text-4xl tracking-wide italic font-serif text-red-800 leading-snug mb-10">
-          {dictionary.testimonials?.title}
-        </h2>
-      </ScrollParallax>
+    <section
+      className="relative py-15 w-full bg-emerald-100 min-h-[400px]"
+      id="testimonials"
+    >
+      {/* ✅ Título */}
+      <div className="h-[100px] flex items-center justify-center mb-8">
+        <ScrollParallax startY={30} delay={100}>
+          <h2 className="text-center text-3xl md:text-4xl tracking-wide italic font-serif text-red-800 leading-snug">
+            {dictionary.testimonials?.title}
+          </h2>
+        </ScrollParallax>
+      </div>
 
-      <div className="flex flex-row lg:max-w-3xl mx-auto items-center">
+      {/* ✅ Container de conteúdo */}
+      <div className="min-h-[200px] flex flex-row lg:max-w-3xl mx-auto items-center">
         <button
-          aria-label={dictionary.testimonials?.ariaLabels.previous}
           onClick={prev}
+          aria-label={
+            dictionary.testimonials?.ariaLabels?.previous || 'anterior'
+          }
           className="px-4 py-2 h-8 rounded-lg hover:text-red-800 transition cursor-pointer hidden md:block"
         >
           <ChevronLeft />
         </button>
 
-        <div
-          ref={touchAreaRef}
-          className="h-48 md:h-48 flex items-center justify-center text-sm max-w-xs lg:max-w-xl mx-auto touch-pan-y select-none"
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
-          onMouseDown={handleMouseDown}
-          onMouseMove={handleMouseMove}
-          onMouseUp={handleMouseUp}
-          onMouseLeave={handleMouseUp}
-          style={{ cursor: isDragging ? 'grabbing' : 'grab' }}
-        >
-          <div
-            className="transition-opacity duration-300 opacity-100"
-            style={{
-              transform: isDragging ? getDragTransform() : 'translateX(0)',
-              willChange: 'transform, opacity',
-            }}
-          >
-            <p className="italic md:max-w-xl text-center lg:text-base text-sm">
-              {reviews[index].text}
+        {/* ✅ Review */}
+        <div className="h-[150px] flex items-center justify-center text-sm max-w-xs lg:max-w-xl mx-auto w-full">
+          <div className="text-center w-full">
+            <p className="italic md:max-w-xl text-center lg:text-base text-sm mb-4">
+              {currentReview.text}
             </p>
-            <p className="mt-4 font-semibold text-center">
-              {reviews[index].author}
-              {platformIcons[reviews[index].platform]}
+            <p className="font-semibold text-center">
+              {currentReview.author}
+              {getPlatformIcon(currentReview.platform)}
             </p>
           </div>
         </div>
 
         <button
-          aria-label={dictionary.testimonials?.ariaLabels.next}
           onClick={next}
+          aria-label={dictionary.testimonials?.ariaLabels?.next || 'próximo'}
           className="px-4 py-2 rounded-lg hover:text-red-800 transition cursor-pointer hidden md:block"
         >
           <ChevronRight />
         </button>
       </div>
 
-      {/* BOLINHAS */}
-      <div className="flex justify-center mt-8">
+      {/* ✅ Dot indicators - AGORA DEVEM APARECER */}
+      <div className="h-[50px] flex items-center justify-center">
         <div className="flex gap-3">
-          {reviews.map((_, i) => (
+          {REVIEWS.map((_, i) => (
             <button
               key={i}
-              onClick={() => goToReview(i)}
+              onClick={() => setIndex(i)}
+              aria-label={`${dictionary.testimonials?.ariaLabels?.viewReview || 'ver review'} ${i + 1}`}
               className={`w-3 h-3 rounded-full transition-all duration-300 cursor-pointer ${
                 i === index
                   ? 'bg-emerald-600 scale-110'
                   : 'bg-emerald-200 hover:bg-emerald-400'
               }`}
-              aria-label={`${dictionary.testimonials?.ariaLabels.viewReview} ${i + 1}`}
             />
           ))}
         </div>
       </div>
     </section>
   )
+}
+
+function getPlatformIcon(platform: string) {
+  switch (platform) {
+    case 'Trip Advisor':
+      return (
+        <Tripadvisor className="inline-block text-green-600 ml-2 bottom-0.5" />
+      )
+    case 'Facebook':
+      return <Facebook className="inline-block text-blue-600 ml-2 bottom-0.5" />
+    case 'Google Maps':
+      return (
+        <GoogleMaps className="inline-block text-red-600 ml-2 bottom-0.5" />
+      )
+    default:
+      return null
+  }
 }

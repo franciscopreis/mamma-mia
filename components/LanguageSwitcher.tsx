@@ -49,21 +49,21 @@ export default function LanguageSwitcher() {
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-1 px-2 py-1 border rounded"
+        className="flex items-center gap-1 px-2 py-1  rounded cursor-pointer"
       >
         <span>{currentLang.flag}</span>
         <span className="hidden sm:block">{currentLang.abbr}</span>
       </button>
 
       {isOpen && (
-        <div className="absolute top-full right-0 mt-1 w-48 bg-white border rounded shadow-lg z-50">
+        <div className="absolute top-full right-0 mt-1 w-48 bg-white border rounded shadow-lg z-50 ">
           {languages.map((lang) => (
             <button
               key={lang.code}
               onClick={() => changeLanguage(lang.code)}
-              className={`flex items-center gap-2 w-full px-4 py-2 text-left ${
+              className={`flex items-center gap-2 w-full px-4 py-2 text-left cursor-pointer ${
                 currentLang.code === lang.code
-                  ? 'bg-emerald-100 text-emerald-800'
+                  ? 'bg-emerald-400 text-emerald-800'
                   : 'text-gray-700'
               }`}
             >

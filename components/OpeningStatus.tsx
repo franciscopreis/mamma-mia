@@ -82,15 +82,15 @@ export default function OpeningStatus({ className = '' }: OpeningStatusProps) {
       {/* Horários detalhados em coluna */}
       <div className="flex flex-col space-y-3 mt-2 w-full max-w-xs bg-white/80 backdrop-blur-sm rounded-xl p-4 shadow-sm border border-gray-200">
         {/* Dias de semana */}
-        <div className="flex flex-col space-y-1">
-          <span className="font-medium text-emerald-700 text-left flex flex-col">
+        <div className="flex flex-col space-y-2">
+          <span className="font-medium text-emerald-700 flex flex-col text-center font-semibold">
             {dictionary.openingStatus?.hours.weekdays}
           </span>
-          <span className="text-gray-700 text-right">
+          <span className="text-gray-700 text-center">
             {dictionary.openingStatus?.hours.lunch}:{' '}
             {dictionary.openingStatus?.hours.lunchTime}
           </span>
-          <span className="text-gray-700 text-right">
+          <span className="text-gray-700 text-center">
             {dictionary.openingStatus?.hours.dinner}:{' '}
             {dictionary.openingStatus?.hours.dinnerTime}
           </span>
@@ -99,7 +99,7 @@ export default function OpeningStatus({ className = '' }: OpeningStatusProps) {
         {/* Segunda-feira fechado */}
         <div className="flex justify-between border-t border-gray-200 pt-2">
           <span className="font-medium text-red-700">
-            {dictionary.openingStatus?.hours.monday}:
+            {dictionary.openingStatus?.hours.monday}
           </span>
           <span className="text-red-700 font-medium">
             {dictionary.openingStatus?.hours.closed}

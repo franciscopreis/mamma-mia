@@ -69,44 +69,68 @@ const items: Pizza[] = [
 export default function Pizzas() {
   const { dictionary } = useDictionary()
 
+  // ✅ Usar SkeletonSection diretamente
   if (!dictionary) return <SkeletonSection type="pizzas" />
 
   return (
-    <section
-      id="pizzas"
-      className="py-15 w-full bg-cover bg-center bg-amber-200/30"
-    >
-      <div className="max-w-6xl mx-auto px-4 text-center">
-        <ScrollParallax startY={30} delay={100}>
-          <h2 className="text-center text-3xl md:text-4xl tracking-wide italic font-serif text-red-800 leading-snug mb-5">
-            {dictionary.pizzas?.title}
-          </h2>
-        </ScrollParallax>
+    <section id="pizzas" className="py-16 w-full bg-amber-200/30">
+      <div className="max-w-6xl mx-auto px-4">
+        {/* ✅ Título */}
+        <div className="mb-12">
+          <ScrollParallax startY={30} delay={100}>
+            <h2 className="text-center text-2xl md:text-3xl tracking-wide italic font-serif text-red-800 leading-snug">
+              {dictionary.pizzas?.title}
+            </h2>
+          </ScrollParallax>
+        </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-          {items.map((p) => (
-            <div key={p.nameKey} className="flex flex-col items-center p-3">
-              <div className="relative mb-4 lg:px-5 lg:pt-5 w-full aspect-4/3">
-                <Image
-                  src={p.img}
-                  alt={getNestedValue(dictionary, p.nameKey)}
-                  width={309}
-                  height={232}
-                  sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw"
-                  quality={75}
-                  className="object-cover rounded-xl w-full h-full"
-                />
-              </div>
-              <h3 className="md:text-xl text-sm font-medium mb-2 text-emerald-800 tracking-wider leading-tight">
-                {p.number} - {getNestedValue(dictionary, p.nameKey)}
-              </h3>
-              <p className="md:text-base text-xs mb-4 text-red-800">
-                {getNestedValue(dictionary, p.ingredientsKey)}
-              </p>
-            </div>
+        {/* ✅ Grid compacto */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {items.map((pizza) => (
+            <PizzaCard
+              key={pizza.nameKey}
+              pizza={pizza}
+              dictionary={dictionary}
+            />
           ))}
         </div>
       </div>
     </section>
+  )
+}
+
+// ✅ Componente de pizza compacto
+function PizzaCard({ pizza, dictionary }: { pizza: Pizza; dictionary: any }) {
+  return (
+    <div className="flex flex-col items-center p-4 bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 h-full">
+      {/* ✅ Imagem compacta */}
+      <div className="relative w-full aspect-[4/3] mb-4 max-w-[200px]">
+        <Image
+          src={pizza.img}
+          alt={getNestedValue(dictionary, pizza.nameKey)}
+          fill
+          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+          quality={75}
+          className="object-cover rounded-lg"
+        />
+      </div>
+
+      {/* ✅ Conteúdo compacto */}
+      <div className="text-center space-y-2 w-full flex-grow flex flex-col">
+        <h3 className="text-lg font-semibold text-emerald-800 tracking-wide leading-tight">
+          {pizza.number} - {getNestedValue(dictionary, pizza.nameKey)}
+        </h3>
+
+        <p className="text-xs text-red-700 leading-tight flex-grow flex items-center justify-center px-2">
+          {getNestedValue(dictionary, pizza.ingredientsKey)}
+        </p>
+
+        <div className="pt-2">
+          <span className="text-xl font-bold text-emerald-700">
+            {pizza.price}€
+          </span>
+        </div>
+      </div>
+    </div>
   )
 }
